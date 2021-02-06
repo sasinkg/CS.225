@@ -4,6 +4,7 @@
  *
  * @author CS 225: Data Structures
  * @version 2018r1-lab1
+ * couldnt find partners file 
  */
 
 #include "HSLAPixel.h"
@@ -12,4 +13,20 @@
 using namespace std;
 
 namespace cs225 {
+    HSLAPixel::HSLAPixel() {
+       
+
+    }
+    HSLAPixel::HSLAPixel(double hue, double saturation, double luminance) {
+        h = hue;
+        s = saturation;
+        l = luminance;
+
+    }
+    HSLAPixel::HSLAPixel(double hue, double saturation, double luminance, double alpha) {
+        h = hue;
+        s = saturation;
+        l = luminance;
+        a = alpha; 
+    }
 }
