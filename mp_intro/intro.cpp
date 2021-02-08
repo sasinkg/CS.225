@@ -25,10 +25,15 @@ cs225::PNG myArt(unsigned int width, unsigned int height) {
   for (unsigned int x = 0; x < width; x++) {
     for (unsigned int y = 0; y < height; y++) {
       //cs225::HSLAPixel &pixel=png.getPixel(x,y);
+      double f = (x/2);
+    
       double distance = sqrt((width-x/2)*(width-x/2)+(height-y/2)*(height-y/2));
       double maxDistance = sqrt((height/2)*(height/2)+(width/2)*(width/2));
-      png.getPixel(x,y) = cs225::HSLAPixel(360.0* maxDistance / distance, maxDistance / distance, maxDistance / distance, 1);
+      png.getPixel(x,y) = cs225::HSLAPixel(360.0* maxDistance / distance, f, maxDistance / distance, 1); 
       
+      
+      // png.getPixel(x,y) = cs225::HSLAPixel(360, f, f, 1);
+
       /* if(pixel.h >= 113.5 && pixel.h < 239.5) {
         pixel.h = 216;
       } else {
