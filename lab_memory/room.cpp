@@ -73,5 +73,8 @@ void Room::copy(const Room& other)
     count = other.count;
     letterCount = other.letterCount;
     letters = other.letters;
+    for (int i = 0; i < letterCount; i++) {
+        letters[i] = other.letters[i];
+    }
 
 }
