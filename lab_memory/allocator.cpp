@@ -97,7 +97,7 @@ int Allocator::solve()
         r->addLetter(alpha[L]);
     }
 
-    return minSpaceRemaining();
+    return minSpaceRemaining(); 
 }
 
 int Allocator::minSpaceRemaining()
@@ -120,4 +120,9 @@ Room* Allocator::largestOpening()
         }
     }
     return &rooms[index];
+}
+
+Allocator::~Allocator() {
+    delete [] alpha;
+    delete [] rooms;
 }

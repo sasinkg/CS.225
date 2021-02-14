@@ -45,6 +45,7 @@ class Allocator
      * @param stream Where to print the results to
      */
     void printRooms(std::ostream & stream = std::cout);
+    ~Allocator();
 
   private:
     /**
