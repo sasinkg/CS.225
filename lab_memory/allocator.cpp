@@ -85,6 +85,7 @@ void Allocator::printRooms(std::ostream & stream /* = std::cout */)
          << std::endl;
     for (int i = 0; i < roomCount; i++)
         rooms[i].print(stream);
+        // hi
 }
 
 int Allocator::solve()
