@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "cs225/PNG.h"
-#include "cs225/HSLAPixel"
+#include "cs225/HSLAPixel.h"
 
 using namespace std;
 
@@ -22,13 +22,13 @@ class Image: public cs225::PNG {
         void lighten();
         void lighten(double amount);
         
-        void darken;
+        void darken();
         void darken(double amount);
 
-        void saturate;
+        void saturate();
         void saturate(double amount);
 
-        void desaturate; 
+        void desaturate(); 
         void desaturate(double amount);
 
         void scale(double factor);
@@ -42,4 +42,4 @@ class Image: public cs225::PNG {
         /* unsigned get
         int getFlag() const;
         void setFlag(int x); */
-}
+};
