@@ -32,18 +32,27 @@ using namespace std;
     }
     void Image::darken() {
         for (unsigned i = 0; i < width(); i++) {
-                    for (unsigned j = 0; j < height(); j++) {
-                        CS225::HSLAPixel & pixel = getPixel(i,j);
-                        if (pixel.l - 0.1 < 0) {
-                            pixel.l = 1; 
-                        } else {
-                            pixel.l = pixel.l - 0.1;
-                        }
-                    }
+            for (unsigned j = 0; j < height(); j++) {
+                CS225::HSLAPixel & pixel = getPixel(i,j);
+                if (pixel.l - 0.1 < 0) {
+                    pixel.l = 1; 
+                } else {
+                    pixel.l = pixel.l - 0.1;
                 }
+            }
+        }
     }
     void Image::darken(double amount) {
-
+        for (unsigned i = 0; i < width(); i++) {
+            for (unsigned j = 0; j < height(); j++) {
+                CS225::HSLAPixel & pixel = getPixel(i,j);
+                if (pixel.l - amount < 0) {
+                    pixel.l = 1; 
+                } else {
+                    pixel.l = pixel.l - amount;
+                }
+            }
+        }
     }
     void Image::saturate() {
         
