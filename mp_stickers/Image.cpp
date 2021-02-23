@@ -47,7 +47,7 @@ using namespace std;
             for (unsigned j = 0; j < height(); j++) {
                 cs225::HSLAPixel & pixel = getPixel(i,j);
                 if (pixel.l - amount < 0) {
-                    pixel.l = 1; 
+                    pixel.l = 0; 
                 } else {
                     pixel.l -= amount;
                 }
@@ -184,11 +184,11 @@ using namespace std;
 			for (unsigned j = 0; j < height(); j++){		
 				cs225::HSLAPixel & pixel = getPixel(i,j);
 				if (degrees > 0) {
-                    pixel.h = (pixel.h + degrees) / 360;
+                    pixel.h = (int) (pixel.h + degrees) % 360;
                 } else {
-                    int rotate = (degrees * -1) / 360;
+                    int rotate = (int) (-1 * degrees) / 360;
                     rotate++;  
-                    pixel.h = (360 * rotate) + degrees + pixel.h;
+                    pixel.h = 360 * rotate + degrees + pixel.h;
                 }
 			}
 		}
