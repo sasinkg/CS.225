@@ -19,10 +19,10 @@ class StickerSheet {
     private:
         void _destroy();
         void _copy(StickerSheet const & other);
-        unsigned stickermax;
-        unsigned stickernum;
+       // unsigned stickermax;
+       // unsigned stickernum;
         Image* *pictures;
-        int *num;
+      //  int *num;
         unsigned int size;
         int *yCor;
         int *xCor;

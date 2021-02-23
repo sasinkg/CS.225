@@ -117,8 +117,15 @@ bool StickerSheet::translate (unsigned index, unsigned x, unsigned y){
     return true;
 }
 
-void StickerSheet::removeSticker (unsigned index){
-    if(index < stickermax && num[index] != 0) {
+void StickerSheet::removeSticker(unsigned index){
+    if (index + 1 <  size) {
+        delete pictures[(int)index + 1];
+        pictures[(int) index + 1] =  NULL;
+        xCor[index + 1] = -1;
+        yCor[index + 1] = -1;
+    }
+    
+    /* if(index <cd stickermax && num[index] != 0) {
         delete pictures[index];
         
         pictures[index] = NULL;
@@ -127,7 +134,7 @@ void StickerSheet::removeSticker (unsigned index){
 
         num[index]--;
         stickernum--;
-    }
+    } */
 }
 
 Image* StickerSheet::getSticker(unsigned index) {

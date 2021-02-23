@@ -25,8 +25,8 @@ int main() {
   // Image mariners
 
   StickerSheet sheet(alma, 500);
-  //sheet.addSticker(arsenal,20,1);
-  sheet.addSticker(youtube,20,1);
+  sheet.addSticker(arsenal,20,1);
+  sheet.addSticker(youtube,100,1);
   sheet.addSticker(i, 500, 200);
   sheet.addSticker(alma, 0,0);
   
