@@ -109,20 +109,26 @@ using namespace std;
         cs225::PNG * p1 = new cs225::PNG (fwidth, fheight);
 
         if (factor < 1) { 
-           for (unsigned i = 0; i < width(); i++) {
+           /* for (unsigned i = 0; i < width(); i++) {
                 for (unsigned j = 0; j < height(); j++) {
                     cs225::HSLAPixel & pixel = getPixel(i,j);
                     for (unsigned a = 0; a < factor; a++) {
                         for (unsigned b = 0; b < factor; b++) {
-                            
-                            unsigned  d = a + i;
-                            unsigned  e = b + j;
-                            cs225::HSLAPixel & pixel2 = p1->getPixel(factor * d, factor * e);
+                            //unsigned  d = a + i;
+                            //unsigned  e = b + j;
+                            cs225::HSLAPixel & pixel2 = p1->getPixel(factor * a + i, factor * b + j);
                             pixel2 = pixel;
                         }   
                     }    
                 }
-            }    
+            }  */
+            for (unsigned i = 0; i < fwidth; i++) {
+                for (unsigned j = 0; j < fheight; j++) {
+                    cs225::HSLAPixel & pixel = getPixel(i / factor, j / factor);
+                    cs225::HSLAPixel & pixel2 = p1->getPixel(i,j);
+                    pixel2 = pixel;
+                }
+            }  
             
         } else if (factor > 1) {
             for (unsigned i = 0; i < fwidth; i++) {

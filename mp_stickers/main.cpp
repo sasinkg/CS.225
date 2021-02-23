@@ -13,22 +13,29 @@ int main() {
 
   Image i;
   i.readFromFile("tests/i.png");
+  i.scale(0.35);
 
-  Image arsenal;
-  arsenal.readFromFile("arsenal.png");
+  Image arsenal2;
+  arsenal2.readFromFile("arsenal2.png");
+  arsenal2.scale(0.035);
 
   Image youtube;
   youtube.readFromFile("youtube.png");
+  youtube.scale(0.066);
 
-  alma.rotateColor(225);
+  //alma.rotateColor(225);
   ///StickerSheet s(alma, 5000);
   // Image mariners
 
-  StickerSheet sheet(alma, 500);
-  sheet.addSticker(arsenal,20,1);
-  sheet.addSticker(youtube,100,1);
-  sheet.addSticker(i, 500, 200);
-  sheet.addSticker(alma, 0,0);
+  StickerSheet sheet(alma, 800);
+  //StickerSheet sheet2(i, 100);
+  sheet.addSticker(arsenal2,200,200);
+  sheet.addSticker(youtube,200,350);
+
+  sheet.addSticker(i, 100, 250);
+
+
+  
   
   
   sheet.render().writeToFile("myImage.png");
