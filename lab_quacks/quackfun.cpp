@@ -27,11 +27,21 @@ namespace QuackFun {
  *          stack in the same state (unchanged).
  */
 template <typename T>
-T sum(stack<T>& s)
-{
-
+T sum(stack<T>& s) {
+    if (s.empty()) {
+        return T();
+    }  
+    //s.pop();
+    //s.top()
+    T top = s.top();
+    s.pop();
+    T total = top + sum(s);
+    s.push(top);
+    return total;
+    
+    
     // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+    //return T(); // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
@@ -53,11 +63,54 @@ T sum(stack<T>& s)
  * @param input The queue representation of a string to check for balanced brackets in
  * @return      Whether the input string had balanced brackets
  */
-bool isBalanced(queue<char> input)
-{
-
+bool isBalanced(queue<char> input) {
+    // stack <char> s;
     // @TODO: Make less optimistic
-    return true;
+    stack<char> brackets;
+    while(input.empty() == false) {
+        if(input.front() == '[') {
+            brackets.push('['); 
+        } else if (input.front() == ']') {
+            if (brackets.empty()) {
+                return false;
+            } brackets.pop();
+        } input.pop();
+
+    } 
+
+    if (brackets.empty()) {
+        return true; 
+    }
+    return false;  
+   
+   
+    /* if (input.empty() == true) {
+        return true;
+    }
+    while(input.empty() == false) {
+        if(input.front() == '[' || input.front() == ']') {
+            brackets.push(input.front());
+        } input.pop();
+    } 
+    int right = 0;
+    int left = 0; 
+    
+    while (brackets.empty() ==false) {
+        if (brackets.top() == '[') {
+            left ++;
+        } if (brackets.top() == ']') {
+            right ++;
+        } if(right > left) {
+            return false;
+        } brackets.pop();
+    }
+    if (right = left) {
+        return true;
+    } else {
+        return false;
+    }
+    return true; */
+//return 0;
 }
 
 /**
@@ -79,8 +132,39 @@ template <typename T>
 void scramble(queue<T>& q)
 {
     stack<T> s;
-    // optional: queue<T> q2;
+    queue<T> q2;
 
-    // Your code here
+    int count = 1; 
+    int temp = 0;
+
+    while(!q.empty()) {
+        if (count % 2 == 0) {
+            for (int i = 0; i < count; i++) {
+                if (q.empty()) {
+                    break;
+                }
+                T data = q.front();
+                q.pop();
+                s.push(data);
+            
+                while(!s.empty()) {
+                    T data = s.top();
+                    s.pop();
+                    s.push(data);
+                }
+            }
+        } else {
+            for (int i = 0; i < count; i++) {
+                if (q.empty()) {
+                    break;
+                }
+                T data = q.front();
+                q.pop();
+                q2.push(data);
+            }
+        } 
+        count++;
+    }
+    q = q2;
 }
 }
