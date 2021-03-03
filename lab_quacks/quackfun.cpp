@@ -146,13 +146,12 @@ void scramble(queue<T>& q)
                 T data = q.front();
                 q.pop();
                 s.push(data);
-            
-                while(!s.empty()) {
-                    T data = s.top();
-                    s.pop();
-                    s.push(data);
-                }
             }
+            while(!s.empty()) {
+                T data = s.top();
+                s.pop();
+                q2.push(data);                
+            }   
         } else {
             for (int i = 0; i < count; i++) {
                 if (q.empty()) {
