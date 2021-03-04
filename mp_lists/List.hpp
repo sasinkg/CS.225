@@ -88,8 +88,19 @@ template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
 
+  ListNode * newNode = new ListNode(ndata);
+  newNode -> next = nullptr;
+  newNode -> prev = tail_;
 
-  
+  if (head == nullptr) {
+    head_ = newNode
+  }
+  if (tail_ != nullptr) {
+    tail_ -> next = newNode
+  }
+
+  tail_ = newNode;
+  length_++;
 }
 
 /**
