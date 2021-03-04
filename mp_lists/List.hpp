@@ -4,10 +4,10 @@
  */
 
 template <class T>
-List<T>::List() { 
+List<T>::List(): length_(0) { 
   // @TODO: graded in MP3.1
-    ListNode* head_ = NULL;
-    ListNode* tail_ = NULL;
+  head_ = NULL;
+  tail_ = NULL;
 }
 
 /**
@@ -17,7 +17,7 @@ List<T>::List() {
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(head_);
 }
 
 /**
@@ -37,6 +37,20 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
+
+  ListNode * boys = head_;
+  
+  if(boys == NULL) { 
+    return;
+  }
+
+  ListNode * men;
+
+  while(boys != NULL) {
+    men = boys->next;
+    delete boys;
+    boys = men;
+  }
 }
 
 /**
@@ -50,16 +64,16 @@ void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
   ListNode * newNode = new ListNode(ndata);
   newNode -> next = head_;
-  newNode -> prev = NULL;
+  newNode -> prev = nullptr;
   
-  if (head_ != NULL) {
+  if (head_ != nullptr) {
     head_ -> prev = newNode;
   }
-  if (tail_ == NULL) {
+  if (tail_ == nullptr) {
     tail_ = newNode;
   }
   
-
+  head_ = newNode;
   length_++;
 
 }
@@ -73,6 +87,9 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
+
+
+  
 }
 
 /**
