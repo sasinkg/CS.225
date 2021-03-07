@@ -4,10 +4,11 @@
  */
 
 template <class T>
-List<T>::List(): length_(0) { 
+List<T>::List() { 
   // @TODO: graded in MP3.1
   head_ = NULL;
   tail_ = NULL;
+  length_ = 0;
 }
 
 /**
@@ -38,7 +39,7 @@ template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
 
-  ListNode * boys = head_;
+  /* ListNode * boys = head_;
   
   if(boys == NULL) { 
     return;
@@ -50,7 +51,16 @@ void List<T>::_destroy() {
     men = boys->next;
     delete boys;
     boys = men;
+  } */
+  while (head_ != NULL) {
+    tail_ = head_ -> next;
+    delete head_;
+    head_ = tail_;
   }
+
+  head_ = NULL;
+  tail_ = NULL;
+  length_ = 0;
 }
 
 /**
@@ -74,6 +84,7 @@ void List<T>::insertFront(T const & ndata) {
   }
   
   head_ = newNode;
+  newNode = NULL;
   length_++;
 
 }
@@ -87,20 +98,22 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
-
   ListNode * newNode = new ListNode(ndata);
   newNode -> next = nullptr;
   newNode -> prev = tail_;
-
-  if (head == nullptr) {
-    head_ = newNode
-  }
-  if (tail_ != nullptr) {
-    tail_ -> next = newNode
+  
+  
+  if (tail_ == nullptr) {
+    head_ = newNode;
+  } else if (tail_ != nullptr) {
+    tail_ -> next = newNode;
   }
 
   tail_ = newNode;
+  //newNode = NULL;
   length_++;
+
+  
 }
 
 /**
@@ -141,7 +154,7 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   *
   * This function will to a wrapped rotation to the left on every three 
   * elements in the list starting for the first three elements. If the 
-  * end of the list has a set of 1 or 2 elements, no rotation all be done 
+  * end of the list has a ssssssssssss et of 1 or 2 elements, no rotation all be done 
   * on the last 1 or 2 elements.
   * 
   * You may NOT allocate ANY new ListNodes!
@@ -149,6 +162,9 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
+  
+
+
 }
 
 
