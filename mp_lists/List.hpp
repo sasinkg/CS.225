@@ -507,7 +507,7 @@ template <typename T>
     stream = stream -> next;
     current = current -> next;
   } */
-)
+}
 /**
  * Sorts a chain of linked memory given a start node and a size.
  * This is the recursive helper for the Mergesort algorithm (i.e., this is
