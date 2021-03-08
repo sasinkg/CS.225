@@ -89,19 +89,6 @@ template <typename T>
 void List<T>::insertBack(const T & ndata) {
    /// @todo Graded in MP3.1
   
-  ListNode * newNode = new ListNode(ndata);
-  newNode -> next = NULL;
-  newNode -> prev = tail_;
-
-  if(tail_ != NULL) {
-    tail_ -> next = newNode;
-  } 
-  if (head_ == NULL) {
-    head_ = newNode;
-  }
-  
-  tail_ = newNode;
-  length_++;
   
   
   
@@ -260,6 +247,17 @@ void List<T>::tripleRotate() {
   }
 
 }
+
+
+
+//PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 
+//PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 
+//PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 
+//PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 PART 2 
+
+
+
+
 
 
 /**
