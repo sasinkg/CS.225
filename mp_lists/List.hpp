@@ -363,7 +363,7 @@ while(tail_ -> next != NULL) {
 }
 
 
-}
+} 
 
 
 /**
@@ -445,8 +445,6 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     }
     return head_;
   }
-
-  //return NULL;
 }
 
 /**
