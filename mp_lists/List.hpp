@@ -434,13 +434,7 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     }
   }
   
-  template <typename T>
-  void List<T>::advance(ListNode*& current, ListNode*& stream) {
-    current -> next = stream;
-    stream -> prev = current;
-    stream = stream -> next;
-    current = current -> next;
-  }
+  
 
 
 // return NULL;
@@ -491,6 +485,13 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     
   } return head_; */
 }
+template <typename T>
+  void List<T>::advance(ListNode*& current, ListNode*& stream) {
+    current -> next = stream;
+    stream -> prev = current;
+    stream = stream -> next;
+    current = current -> next;
+  }
 
 /**
  * Sorts a chain of linked memory given a start node and a size.
