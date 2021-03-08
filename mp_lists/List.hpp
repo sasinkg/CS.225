@@ -409,9 +409,17 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   ListNode *temp;
 
   if(first != NULL) {
-    advance(temp,first);
+    //advance(temp,first);
+    temp -> next = first;
+    first -> prev = temp;
+    first = first -> next;
+    temp = temp -> next;
   } else if (second != NULL) {
-    advance(temp,second);
+    //advance(temp,second);
+    temp -> next = second;
+    second -> prev = temp;
+    second = second -> next;
+    temp = temp -> next;
   }
 
   if(first -> data < second -> data) {
@@ -427,9 +435,17 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   while(first != NULL) {
     while (second != NULL) {
       if (first -> data < second -> data) {
-        advance(temp, first);
+        temp -> next = first;
+        first -> prev = temp;
+        first = first -> next;
+        temp = temp -> next;
       } else {
-        advance(temp, second);
+        //advance(temp,second);
+        temp -> next = second;
+        second -> prev = temp;
+        second = second -> next;
+        temp = temp -> next;
+        //advance(temp, second);
       }
     }
   }
@@ -483,16 +499,15 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       tail_ -> next = second;
     }
     
-  } return head_; */
-}
+  } return head_; 
 template <typename T>
   void List<T>::advance(ListNode*& current, ListNode*& stream) {
     current -> next = stream;
     stream -> prev = current;
     stream = stream -> next;
     current = current -> next;
-  }
-
+  } */
+)
 /**
  * Sorts a chain of linked memory given a start node and a size.
  * This is the recursive helper for the Mergesort algorithm (i.e., this is
