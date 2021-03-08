@@ -97,23 +97,24 @@ void List<T>::insertFront(T const & ndata) {
  */
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
-  /// @todo Graded in MP3.1
+  /* /// @todo Graded in MP3.1
   ListNode * newNode = new ListNode(ndata);
-  newNode -> next = nullptr;
-  newNode -> prev = tail_;
+  //newNode -> next = nullptr;
+  //newNode -> prev = tail_;
   
   
-  if (tail_ == nullptr) {
+  if (tail_ == NULL) {
     head_ = newNode;
-  } else if (tail_ != nullptr) {
+  } else  {
     tail_ -> next = newNode;
+    newNode -> prev = tail_;
   }
 
   tail_ = newNode;
-  //newNode = NULL;
+  newNode = NULL;
   length_++;
-
-  
+*/ 
+ 
 }
 
 /**
@@ -135,6 +136,13 @@ void List<T>::insertBack(const T & ndata) {
 template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1
+  if(start == NULL || length_ < splitPoint) {
+    return NULL;
+  }
+  if (splitPoint < 1) {
+    return start;
+  }
+  
   ListNode * curr = start;
 
   for (int i = 0; i < splitPoint || curr != NULL; i++) {
@@ -163,7 +171,39 @@ template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
   
+  if (head == NULL || length_ < 3) {
+    return;
+  }
+  ListNode * curr = head_;
+  ListNode * one,two,three,four,end = nullptr;
 
+  while (curr != NULL) {
+    one = curr;
+    if (one == NULL) {
+      return;
+    }
+    two = one->next;
+    if (two == NULL) {
+      return;
+    }
+    three = two->next;
+    if(three == NULL) {
+      return;
+    }
+
+    end = curr-> prev;
+    four = three -> next;
+
+    if(end == NULL) {
+      if(four == NULL) {
+        head_ = two;
+        tail_ = one;
+
+        b->
+
+      }
+    }
+  }
 
 }
 
@@ -201,6 +241,7 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 template <typename T>
 void List<T>::reverseNth(int n) {
   /// @todo Graded in MP3.2
+
 }
 
 
@@ -259,5 +300,19 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
+
+  if(chainLength == 1) {
+    return start;
+  }
+
+  ListNode* second = split(start, chainLength / 2);
+
+  start = mergesort(start, chainLength / 2);
+  second = mergesort(second, chainLength - chainLength / 2);
+
+  start = merge(start, second);
+
+  return start;
+
   return NULL;
 }
