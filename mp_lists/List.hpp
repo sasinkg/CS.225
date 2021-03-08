@@ -100,6 +100,23 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
    /// @todo Graded in MP3.1
+  
+  ListNode * newNode = new ListNode(ndata);
+  newNode -> next = NULL;
+  newNode -> prev = tail_;
+
+  if(tail_ != NULL) {
+    tail_ -> next = newNode;
+  } 
+  if (head_ == NULL) {
+    head_ = newNode;
+  }
+  
+  tail_ = newNode;
+  length_++;
+  
+  
+  
   //ListNode * newNode = new ListNode(ndata);
   //newNode -> next = NULL;
   //newNode -> prev = tail_;
@@ -116,7 +133,6 @@ void List<T>::insertBack(const T & ndata) {
   tail_ = newNode;
   newNode = NULL;
   length_++; */
-
   
   /* if(tail_ != NULL) {
     tail_ -> next = newNode;
@@ -283,20 +299,25 @@ template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.2
 
-  if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) {
+  if(startPoint == NULL) {
+    return;
+  }
+  if(endPoint ==NULL) {
+    return;
+  }
+  if(startPoint == endPoint) {
     return;
   }
 
   ListNode * oldStartPoint = startPoint;
   ListNode * oldEndPoint = endPoint;
-
   if(endPoint -> next != NULL) {
     endPoint -> next -> prev = startPoint;
   } 
   if(startPoint -> prev != NULL) {
     startPoint -> prev -> next = endPoint;
   }
-
+  
   ListNode * swap = startPoint -> next;
   startPoint -> next = endPoint -> next;
   startPoint -> prev = swap;
@@ -374,7 +395,7 @@ while(tail_ -> next != NULL) {
 template <typename T>
 void List<T>::mergeWith(List<T> & otherList) {
     // set up the current list
-     head_ = merge(head_, otherList.head_);
+    head_ = merge(head_, otherList.head_);
     tail_ = head_;
 
     // make sure there is a node in the new list
@@ -408,20 +429,6 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   ListNode *list;
   ListNode *temp;
 
-  if(first != NULL) {
-    //advance(temp,first);
-    temp -> next = first;
-    first -> prev = temp;
-    first = first -> next;
-    temp = temp -> next;
-  } else if (second != NULL) {
-    //advance(temp,second);
-    temp -> next = second;
-    second -> prev = temp;
-    second = second -> next;
-    temp = temp -> next;
-  }
-
   if(first -> data < second -> data) {
     list = first;
     temp = first;
@@ -432,6 +439,21 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     second = second -> next;
   }
 
+  if(first != NULL) {
+    
+    temp -> next = first;
+    first -> prev = temp;
+    first = first -> next;
+    temp = temp -> next;
+  } else if (second != NULL) {
+   
+    temp -> next = second;
+    second -> prev = temp;
+    second = second -> next;
+    temp = temp -> next;
+  }
+
+  
   while(first != NULL) {
     while (second != NULL) {
       if (first -> data < second -> data) {
@@ -440,16 +462,17 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
         first = first -> next;
         temp = temp -> next;
       } else {
-        //advance(temp,second);
+        
         temp -> next = second;
         second -> prev = temp;
         second = second -> next;
         temp = temp -> next;
-        //advance(temp, second);
+        
       }
     }
   }
-  
+  return list;
+} 
   
 
 
@@ -507,7 +530,7 @@ template <typename T>
     stream = stream -> next;
     current = current -> next;
   } */
-}
+
 /**
  * Sorts a chain of linked memory given a start node and a size.
  * This is the recursive helper for the Mergesort algorithm (i.e., this is
