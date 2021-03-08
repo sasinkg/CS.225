@@ -104,7 +104,7 @@ void List<T>::insertBack(const T & ndata) {
   //newNode -> next = NULL;
   //newNode -> prev = tail_;
   
-  ListNode * newNode = new ListNode(ndata);
+  /* ListNode * newNode = new ListNode(ndata);
   if(tail_ == NULL) {
     head_ = newNode;
   } 
@@ -115,7 +115,7 @@ void List<T>::insertBack(const T & ndata) {
 
   tail_ = newNode;
   newNode = NULL;
-  length_++;
+  length_++; */
 
   
   /* if(tail_ != NULL) {
