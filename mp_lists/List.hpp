@@ -426,7 +426,27 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     second = second -> next;
   }
   
-  return NULL;
+  while (first != nullptr) {
+    while (second != nullptr) {
+      if (first -> data < second -> data) {
+        tail_ -> next = first;
+        tail_ = first;
+        first = first -> next;
+      } else {
+        tail_ -> next = second;
+        tail_ = second;
+        second = second -> next;
+      }
+    }
+    if (first != nullptr) {
+      tail_ -> next = first;
+    } else {
+      tail_ -> next = second;
+    }
+    return head_;
+  }
+
+  //return NULL;
 }
 
 /**
