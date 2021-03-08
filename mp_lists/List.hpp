@@ -100,6 +100,23 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
    /// @todo Graded in MP3.1
+  
+  ListNode * newNode = new ListNode(ndata);
+  newNode -> next = NULL;
+  newNode -> prev = tail_;
+
+  if(tail_ != NULL) {
+    tail_ -> next = newNode;
+  } 
+  if (head_ == NULL) {
+    head_ = newNode;
+  }
+  
+  tail_ = newNode;
+  length_++;
+  
+  
+  
   //ListNode * newNode = new ListNode(ndata);
   //newNode -> next = NULL;
   //newNode -> prev = tail_;
@@ -115,8 +132,12 @@ void List<T>::insertBack(const T & ndata) {
 
   tail_ = newNode;
   newNode = NULL;
+<<<<<<< HEAD
   length_++; 
 
+=======
+  length_++; */
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   
   /* if(tail_ != NULL) {
     tail_ -> next = newNode;
@@ -291,6 +312,7 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   }
 
 
+<<<<<<< HEAD
   ListNode * mid = endPoint -> prev;
   endPoint -> prev = endPoint -> next; 
   endPoint -> next = mid;
@@ -307,11 +329,21 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   mid = NULL;
 /* 
   if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) {
+=======
+  if(startPoint == NULL) {
+    return;
+  }
+  if(endPoint ==NULL) {
+    return;
+  }
+  if(startPoint == endPoint) {
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
     return;
   } 
 
   ListNode * oldStartPoint = startPoint;
   ListNode * oldEndPoint = endPoint;
+<<<<<<< HEAD
 
 
   if(startPoint -> prev != NULL) {
@@ -322,6 +354,15 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   } 
   
 
+=======
+  if(endPoint -> next != NULL) {
+    endPoint -> next -> prev = startPoint;
+  } 
+  if(startPoint -> prev != NULL) {
+    startPoint -> prev -> next = endPoint;
+  }
+  
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   ListNode * swap = startPoint -> next;
   startPoint -> next = endPoint -> next;
   startPoint -> prev = swap;
@@ -428,7 +469,12 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 
   ListNode *list;
   ListNode *temp;
+<<<<<<< HEAD
 if(first -> data < second -> data) {
+=======
+
+  if(first -> data < second -> data) {
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
     list = first;
     temp = first;
     first = first -> next;
@@ -437,15 +483,24 @@ if(first -> data < second -> data) {
     temp = second;
     second = second -> next;
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   if(first != NULL) {
-    //advance(temp,first);
+    
     temp -> next = first;
     first -> prev = temp;
     first = first -> next;
     temp = temp -> next;
+<<<<<<< HEAD
   } 
   if (second != NULL) {
     //advance(temp,second);
+=======
+  } else if (second != NULL) {
+   
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
     temp -> next = second;
     second -> prev = temp;
     second = second -> next;
@@ -453,24 +508,35 @@ if(first -> data < second -> data) {
   }
 
   
+<<<<<<< HEAD
 
   while(first != NULL && second != NULL) {
     
+=======
+  while(first != NULL) {
+    while (second != NULL) {
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
       if (first -> data < second -> data) {
         temp -> next = first;
         first -> prev = temp;
         first = first -> next;
         temp = temp -> next;
       } else {
-        //advance(temp,second);
+        
         temp -> next = second;
         second -> next -> prev = temp;
         second = second -> next;
         temp = temp -> next;
-        //advance(temp, second);
+        
       }
     }
+<<<<<<< HEAD
   
+=======
+  }
+  return list;
+} 
+>>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   
 
   return list;
@@ -532,7 +598,7 @@ template <typename T>
     stream = stream -> next;
     current = current -> next;
   } */
-}
+
 /**
  * Sorts a chain of linked memory given a start node and a size.
  * This is the recursive helper for the Mergesort algorithm (i.e., this is
