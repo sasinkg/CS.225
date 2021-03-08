@@ -405,7 +405,7 @@ template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
 
-  if(first == NULL) {
+  /* if(first == NULL) {
     return second;
   }
 
@@ -444,7 +444,7 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       tail_ -> next = second;
     }
     return head_;
-  }
+  } */
 }
 
 /**
