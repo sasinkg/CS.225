@@ -404,26 +404,71 @@ void List<T>::mergeWith(List<T> & otherList) {
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
-// return NULL;
-  if(first == NULL) {
-    return second;
+
+  ListNode *list;
+  ListNode *temp;
+
+  if(first != NULL) {
+    advance(temp,first);
+  } else if (second != NULL) {
+    advance(temp,second);
   }
 
+  if(first -> data < second -> data) {
+    list = first;
+    temp = first;
+    first = first -> next;
+  } else { 
+    list = second;
+    temp = second;
+    second = second -> next;
+  }
+
+  while(first != NULL) {
+    while (second != NULL) {
+      if (first -> data < second -> data) {
+        advance(temp, first);
+      } else {
+        advance(temp, second);
+      }
+    }
+  }
+  
+  template <typename T>
+  void List<T>::advance(ListNode*& current, ListNode*& stream) {
+    current -> next = stream;
+    stream -> prev = current;
+    stream = stream -> next;
+    current = current -> next;
+  }
+
+
+// return NULL;
+  /* if(first == NULL) {
+    return second;
+  }
   if(second == NULL) {
     return first;
   }
 
-  ListNode* head_ = NULL;
-  ListNode* tail_ = NULL;
+  
+
+
+  ListNode * sum = NULL;
+  ListNode * one = first;
+  ListNode * two = second;
 
   if(first -> data < second -> data) {
-    head_ = first;
-    tail_ = first;
-    first = first -> next;
+    sum = first;
+    one = one -> next;
   } else {
-    head_ = second;
-    tail_ = second;
-    second = second -> next;
+    sum = second;
+    two = two -> next;
+    sum = first;
+    one = one -> next;
+  } else {
+    sum = second;
+    two = two -> next;
   }
   
   while (first != nullptr) {
@@ -444,7 +489,7 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       tail_ -> next = second;
     }
     
-  } return head_;
+  } return head_; */
 }
 
 /**
