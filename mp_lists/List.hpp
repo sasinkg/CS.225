@@ -374,7 +374,7 @@ while(tail_ -> next != NULL) {
 template <typename T>
 void List<T>::mergeWith(List<T> & otherList) {
     // set up the current list
-    head_ = merge(head_, otherList.head_);
+     head_ = merge(head_, otherList.head_);
     tail_ = head_;
 
     // make sure there is a node in the new list
@@ -387,7 +387,7 @@ void List<T>::mergeWith(List<T> & otherList) {
     // empty out the parameter list
     otherList.head_ = NULL;
     otherList.tail_ = NULL;
-    otherList.length_ = 0;
+    otherList.length_ = 0; 
 }
 
 /**
@@ -404,8 +404,8 @@ void List<T>::mergeWith(List<T> & otherList) {
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
-
-  /* if(first == NULL) {
+// return NULL;
+  if(first == NULL) {
     return second;
   }
 
@@ -443,8 +443,8 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     } else {
       tail_ -> next = second;
     }
-    return head_;
-  } */
+    
+  } return head_;
 }
 
 /**
