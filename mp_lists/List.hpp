@@ -39,19 +39,7 @@ template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
 
-  /* ListNode * boys = head_;
   
-  if(boys == NULL) { 
-    return;
-  }
-
-  ListNode * men;
-
-  while(boys != NULL) {
-    men = boys->next;
-    delete boys;
-    boys = men;
-  } */
   while (head_ != NULL) {
     tail_ = head_ -> next;
     delete head_;
@@ -117,9 +105,6 @@ void List<T>::insertBack(const T & ndata) {
   
   
   
-  //ListNode * newNode = new ListNode(ndata);
-  //newNode -> next = NULL;
-  //newNode -> prev = tail_;
   
   ListNode * newNode = new ListNode(ndata);
   if(tail_ == NULL) {
@@ -132,12 +117,8 @@ void List<T>::insertBack(const T & ndata) {
 
   tail_ = newNode;
   newNode = NULL;
-<<<<<<< HEAD
   length_++; 
 
-=======
-  length_++; */
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   
   /* if(tail_ != NULL) {
     tail_ -> next = newNode;
@@ -312,7 +293,6 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   }
 
 
-<<<<<<< HEAD
   ListNode * mid = endPoint -> prev;
   endPoint -> prev = endPoint -> next; 
   endPoint -> next = mid;
@@ -327,61 +307,8 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   startPoint -> prev = endPoint -> next;
   endPoint -> next = mid;
   mid = NULL;
-/* 
-  if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) {
-=======
-  if(startPoint == NULL) {
-    return;
-  }
-  if(endPoint ==NULL) {
-    return;
-  }
-  if(startPoint == endPoint) {
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
-    return;
-  } 
-
-  ListNode * oldStartPoint = startPoint;
-  ListNode * oldEndPoint = endPoint;
-<<<<<<< HEAD
 
 
-  if(startPoint -> prev != NULL) {
-      startPoint -> prev -> next = endPoint;
-  }
-  if(endPoint -> next != NULL) {
-    endPoint -> next -> prev = startPoint;
-  } 
-  
-
-=======
-  if(endPoint -> next != NULL) {
-    endPoint -> next -> prev = startPoint;
-  } 
-  if(startPoint -> prev != NULL) {
-    startPoint -> prev -> next = endPoint;
-  }
-  
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
-  ListNode * swap = startPoint -> next;
-  startPoint -> next = endPoint -> next;
-  startPoint -> prev = swap;
-
-  ListNode * curr = oldEndPoint;
-  ListNode * back = NULL;
-
-  while(curr != oldStartPoint) {
-    back = curr -> prev;
-    curr -> prev = curr -> next;
-    curr -> next = back;
-    curr = curr -> next;
-  } 
-
-  startPoint = oldEndPoint;
-  endPoint = oldStartPoint; 
-
-*/
-return;
 
 }
 
@@ -469,12 +396,7 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 
   ListNode *list;
   ListNode *temp;
-<<<<<<< HEAD
 if(first -> data < second -> data) {
-=======
-
-  if(first -> data < second -> data) {
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
     list = first;
     temp = first;
     first = first -> next;
@@ -483,24 +405,15 @@ if(first -> data < second -> data) {
     temp = second;
     second = second -> next;
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   if(first != NULL) {
     
     temp -> next = first;
     first -> prev = temp;
     first = first -> next;
     temp = temp -> next;
-<<<<<<< HEAD
   } 
   if (second != NULL) {
     //advance(temp,second);
-=======
-  } else if (second != NULL) {
-   
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
     temp -> next = second;
     second -> prev = temp;
     second = second -> next;
@@ -508,14 +421,8 @@ if(first -> data < second -> data) {
   }
 
   
-<<<<<<< HEAD
-
-  while(first != NULL && second != NULL) {
-    
-=======
   while(first != NULL) {
     while (second != NULL) {
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
       if (first -> data < second -> data) {
         temp -> next = first;
         first -> prev = temp;
@@ -530,74 +437,12 @@ if(first -> data < second -> data) {
         
       }
     }
-<<<<<<< HEAD
-  
-=======
   }
   return list;
 } 
->>>>>>> 6822da119d5cbb7e835cd5204980cde2ac9275d5
   
 
-  return list;
-  //return NULL;
   
-
-
-// return NULL;
-  /* if(first == NULL) {
-    return second;
-  }
-  if(second == NULL) {
-    return first;
-  }
-
-  
-
-
-  ListNode * sum = NULL;
-  ListNode * one = first;
-  ListNode * two = second;
-
-  if(first -> data < second -> data) {
-    sum = first;
-    one = one -> next;
-  } else {
-    sum = second;
-    two = two -> next;
-    sum = first;
-    one = one -> next;
-  } else {
-    sum = second;
-    two = two -> next;
-  }
-  
-  while (first != nullptr) {
-    while (second != nullptr) {
-      if (first -> data < second -> data) {
-        tail_ -> next = first;
-        tail_ = first;
-        first = first -> next;
-      } else {
-        tail_ -> next = second;
-        tail_ = second;
-        second = second -> next;
-      }
-    }
-    if (first != nullptr) {
-      tail_ -> next = first;
-    } else {
-      tail_ -> next = second;
-    }
-    
-  } return head_; 
-template <typename T>
-  void List<T>::advance(ListNode*& current, ListNode*& stream) {
-    current -> next = stream;
-    stream -> prev = current;
-    stream = stream -> next;
-    current = current -> next;
-  } */
 
 /**
  * Sorts a chain of linked memory given a start node and a size.
