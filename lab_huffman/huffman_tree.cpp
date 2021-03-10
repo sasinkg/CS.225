@@ -120,6 +120,12 @@ void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
     queue<TreeNode*> singleQueue; // Queue containing the leaf nodes
     queue<TreeNode*> mergeQueue;  // Queue containing the inner nodes
 
+    if (int i = 0; i < frequencies.size(); i++) {
+        HuffmanTree::TreeNode * leaf = new HuffmanTree::TreeNode(frequencies[i]);
+        singleQueue.push(leaf);
+    }
+
+    
     /**
      * @todo Your code here!
      *
