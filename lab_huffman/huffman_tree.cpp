@@ -74,6 +74,35 @@ HuffmanTree::TreeNode*
 HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
                             queue<TreeNode*>& mergeQueue)
 {
+    if (singleQueue.empty() && mergeQueue.empty()) {
+        return NULL;
+    }
+
+    if (mergeQueue.empty()) {
+        TreeNode * a = singleQueue.front();
+        singleQueue.pop();
+        return a;
+    }
+
+    if (singleQueue.empty()) {
+        TreeNode * b = mergeQueue.front();
+        mergeQueue.pop();
+        return b;
+    }
+
+    if(singleQueue.front() -> freq.getFrequency() > mergeQueue.front() -> freq.getFrequency()) {
+        TreeNode * c = mergeQueue.front();
+        mergeQueue.pop();
+        return c;
+    } else if (singleQueue.front() -> freq.getFrequency() < mergeQueue.front() -> freq.getFrequency()) {
+        TreeNode * d = singleQueue.front();
+        singleQueue.pop();
+        return d;
+    } else {
+        TreeNode * e = singleQueue.front();
+        singleQueue.pop();
+        return e;
+    }
 
     /**
      * @todo Your code here!
@@ -142,7 +171,7 @@ void HuffmanTree::writeTree(BinaryFileWriter& bfile)
 }
 
 void HuffmanTree::writeTree(TreeNode* current, BinaryFileWriter& bfile)
-{
+{   
     /**
      * @todo Your code here!
      *
