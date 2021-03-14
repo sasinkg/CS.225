@@ -263,8 +263,8 @@ HuffmanTree::TreeNode* HuffmanTree::readTree(BinaryFileReader& bfile)
 
     bool nbit = bfile.getNextBit();
     if(nbit == 1) {
-        Frequency* f = newFrequency(bfile.getNextByte(),0);
-        TreeNode* lnode = new TreeNode(*f);
+        Frequency f (bfile.getNextByte(),0);
+        TreeNode* lnode = new TreeNode(f);
         return lnode;
     }
     if(nbit == 0) {
