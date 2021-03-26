@@ -22,6 +22,39 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
      * @todo Implement this function!
      */
 
-    return NULL;
+    std::map <Point<3>, TileImage *> newMap;
+    vector <Point<3>> newPoint;
+
+    for(unsigned int i = 0; i < theTiles.size(); i++) {
+        LUVAPixel pixel = theTiles[i].getAverageColor();
+        Point<3> newPointTwo;
+
+        newPointTwo[0] = pixel.l;
+        newPointTwo[1] = pixel.u;
+        newPointTwo[2] = pixel.v;
+
+        newMap.insert(pair <Point<3>, TileImage *> (newPoint, &(theTiles[i]) ));
+    }
+
+    KDTree<3> newTree(newPoint);
+    int rows = theSource.getRows();
+    int col = theSource.getColumns();
+
+    MosaicCanvas * newCanvas = new MosaicCanvas(rows, col);
+
+    for(int i = 0; i <rows; i++) {
+        for (int j = 0; j < col; j++) {
+            LUVAPixel pixel = theSource.getRegionColor(i, j);
+            Point<3> newPointTwo;
+
+            newPointTwo[0] = pixel.l;
+            newPointTwo[1] = pixel.u;
+            newPointTwo[2] = pixel.v;
+
+            Point<3> newPointThree = newTree.findNearestNeighbor(newPointTwo);
+            newCanvas -> setTile(i,j, newMap.find(newPointThree) -> second);
+        }
+    }
+    return newCanvas;
 }
 
