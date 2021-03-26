@@ -37,13 +37,13 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
     }
 
     KDTree<3> newTree(newPoint);
-    int rows = theSource.getRows();
-    int col = theSource.getColumns();
+    //int rows = theSource.getRows();
+    //int col = theSource.getColumns();
 
-    MosaicCanvas * newCanvas = new MosaicCanvas(rows, col);
+    MosaicCanvas * newCanvas = new MosaicCanvas(theSource.getRows(), theSource.getColumns());
 
-    for(int i = 0; i <rows; i++) {
-        for (int j = 0; j < col; j++) {
+    for(int i = 0; i < theSource.getRows(); i++) {
+        for (int j = 0; j < theSource.getColumns(); j++) {
             LUVAPixel pixel = theSource.getRegionColor(i, j);
             Point<3> newPointTwo;
 
