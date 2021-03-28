@@ -79,6 +79,7 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
 void BinaryTree<T>::mirror()
 {
     //your code here
+    mirror(root);
 }
 
 
@@ -89,9 +90,73 @@ void BinaryTree<T>::mirror()
  *  criterion for a binary tree to be a binary search tree.
  */
 template <typename T>
+void BinaryTree<T>::mirror(Node* subRoot) {
+    if (subRoot == NULL) {
+        return;
+    }
+    Node *temp = subRoot -> left;
+    subRoot -> left = subRoot -> right;
+    subRoot -> right = temp;
+
+    mirror(subRoot -> left);
+    mirror(subRoot -> right);
+}
+
+template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
+    bool isOrdered = true;
+    Node* previous = NULL;
+    Node* parent = NULL;
+    Node* current = root; 
+
+    if(root == NULL) 
+    {
+        return isOrdered;
+    }
+
+
+    while(current != NULL) 
+    {
+      if(current->left != NULL) 
+      {
+          previous = current->left;
+
+        while(previous->right != NULL && previous->right != current) 
+        {
+            previous = previous->right;
+        }
+        if(previous->right != NULL) 
+        {
+            previous->right = NULL;
+          if(parent->elem >= current->elem) 
+          {
+              isOrdered = false;
+          }
+          parent = current;
+          current = current->right;
+        } 
+        else 
+        {
+          previous->right = current;
+          current = current->left;
+        }
+      } 
+      else if(current->left == NULL)
+      {
+        if(parent != NULL && parent->elem >= current->elem) 
+        {
+            isOrdered = false;
+        }
+        parent = current;
+        current = current->right;
+      }
+    }
+
+    return isOrdered;
+    
+
     return false;
 }
 
@@ -105,6 +170,30 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
     // your code here
-    return false;
+    
+    Node *previous = NULL;
+    return isOrderedRecursive(root,previous);
+    //return false;
+}
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(Node* root, Node *&previous) const
+{
+    bool isOrdered = true;
+    if(root != NULL)
+    {
+        if(!isOrderedRecursive(root->left, previous))
+        {
+            isOrdered = false;
+            return isOrdered;
+        }
+        else if(previous != NULL && root->elem <= previous->elem)
+        {
+            isOrdered = false;
+            return isOrdered;
+        }
+        previous = root;
+        return isOrderedRecursive(root->right, previous);
+    }
+    return isOrdered;
 }
 

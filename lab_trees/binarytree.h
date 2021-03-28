@@ -120,6 +120,7 @@ class BinaryTree
          *  (not creating a flipped copy).
          */
         void mirror();
+        void mirror(Node* subroot);
 
         /**
          * isOrdered() function iterative version
@@ -128,6 +129,7 @@ class BinaryTree
          *  criterion for a binary tree to be a binary search tree.
          */
         bool isOrderedIterative() const;
+        
 
         /**
          * isOrdered() function recursive version
@@ -136,6 +138,7 @@ class BinaryTree
          *  criterion for a binary tree to be a binary search tree.
          */
         bool isOrderedRecursive() const;
+        bool isOrderedRecursive(Node* root, Node *&prev) const;
 
         /**
          *  Uses vector to store values of the nodes of a binary tree in order.
