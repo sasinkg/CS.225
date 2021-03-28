@@ -46,6 +46,16 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
 }
 
 template <int Dim>
+double KDTree<Dim>::distance(const Point<Dim> pointOne, const Point<Dim> pointTwo) const{
+
+  double dist = 0;
+  for(int i = 0; i < Dim; i++) {
+    dist += pow(pointOne[i] - pointTwo[i], 2);
+  }
+  return dist;
+}
+
+template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 {
     /**
@@ -57,6 +67,37 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
     points.push_back(newPoints[i]);
   }
   root = buildTree (0, 0, points.size() - 1); 
+}
+
+template <int Dim>
+KDTree<Dim>::buildTree(int dimension, int left, int right, KDTreeNode*& currRoot) {
+  if(left <= right) {
+    int average = (left + right) / 2;
+    int newDim = (dimension + 1) %Dim;
+    currRoot = new KDTreeNode(quickSelect(left, right, average, dimension);
+  }
+
+  buildTree(newDim, left, average - 1, currRoot -> left);
+  buildTree(next_dim, med + 1, right, currRoot->right);
+}
+
+template <int Dim>
+Point<Dim> 
+KDTree<Dim>::KDTree::quickSelect(int left, int right, int a, int dim) {
+  if (left == right) {
+    return list[left];
+  }
+
+  int pivotIndex = (left + right) / 2;
+  pivotIndex = partition(left, right, pivotIndex, dim);
+
+  if (a = pivotIndex) {
+    return list[pivotIndex];
+  } else if (a < pivotIndex) {
+    return quickSelect(left, pivotIndex - 1, a, dim);
+  } else {
+    return quickSelect(pivotIndex + 1, right, a, dim);
+  }
 }
 
 template <int Dim>
