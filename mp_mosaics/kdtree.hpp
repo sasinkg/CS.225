@@ -85,7 +85,7 @@ KDTree<Dim>::KDTree(const vector <Point<Dim>>& newPoints) {
 
 template <int Dim>
 typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int right) {
-  KDTreeNode * currRoot = NULL;
+  KDTreeNode * currentRoot = NULL;
   if (left <= right) {
     int average = (left + right) / 2;
     KDTree<Dim>::quickSelect(left, right, average, dim);
