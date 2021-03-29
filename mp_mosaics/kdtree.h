@@ -266,7 +266,7 @@ class KDTree
 
      vector <Point<Dim>> points;
      std::vector<Point<Dim>> list;
-    double distance(const Point<Dim> p1, const Point<Dim> p2) const;  
+    int distance(const Point<Dim>& target, const Point<Dim>& query) const;  
     void quickSelect(int left, int right, int a, int dimension);
     int partition(int left, int right, int pivotIndex, int dimension); 
     void dhelper(KDTreeNode* curr);
