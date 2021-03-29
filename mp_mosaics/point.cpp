@@ -43,7 +43,7 @@ Point<Dim>::Point(T x0, T x1, T x2) {
 template <int Dim>
 template <typename T>
 Point<Dim>::Point(T x, ...) {
-    vals[0] = x;
+   // vals[0] = x;
     va_list ap;
     va_start(ap, x);
     for (int i = 1; i < Dim; i++)
