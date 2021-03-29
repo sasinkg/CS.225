@@ -264,20 +264,17 @@ class KDTree
      * @todo Add your helper functions here.
      */
 
-     vector <Point<Dim>> points;
-     std::vector<Point<Dim>> list;
+    vector <Point<Dim>> points;
+    std::vector<Point<Dim>> list;
     int distance(const Point<Dim>& target, const Point<Dim>& query) const;  
     void quickSelect(int left, int right, int k, int dim);
     int partition(int left, int right, int pivot, int dim); 
     void dhelper(KDTreeNode* curr);
     Point<Dim> fnhelper(const Point<Dim>& q, int dim, KDTreeNode * curr) const;
     void swap (int left, int right);
-    //void swap(int left, int right); 
     KDTreeNode * buildTree (int dim, int left, int right); 
     void copy(const KDTree<Dim>& other); 
     void destroy(KDTreeNode*& subRoot); 
-    bool isLeaf(KDTreeNode*& subRoot) const; 
-    Point<Dim> nNeighbor(const Point<Dim>& query,int dimension,  KDTreeNode* currRoot) const;
 };
 
 #include "kdtree.hpp"
