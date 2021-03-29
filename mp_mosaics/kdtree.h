@@ -269,14 +269,14 @@ class KDTree
     double distance(const Point<Dim> p1, const Point<Dim> p2) const;  
     void quickSelect(int left, int right, int a, int dimension);
     int partition(int left, int right, int pivotIndex, int dimension); 
-void dhelper(KDTreeNode* curr);
+    void dhelper(KDTreeNode* curr);
     void swap (int left, int right);
     //void swap(int left, int right); 
     KDTreeNode * buildTree (int dim, int left, int right); 
     void copy(const KDTree<Dim>& other); 
     void destroy(KDTreeNode*& subRoot); 
     bool isLeaf(KDTreeNode*& subRoot) const; 
-    Point<Dim> _nearestNeighbor(const Point<Dim>& query,int dimension,  KDTreeNode* currRoot) const;
+    Point<Dim> nNeighbor(const Point<Dim>& query,int dimension,  KDTreeNode* currRoot) const;
 };
 
 #include "kdtree.hpp"

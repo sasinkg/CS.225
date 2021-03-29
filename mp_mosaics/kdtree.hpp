@@ -56,62 +56,57 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
       return potential < currentBest;
     } else if (pointTotal < countTotal) {
       return true;
-    } 
-    return false;
+    }  else {
+      return false;
+    }
+    // return false;
     //return false;
 }
 
- template <int Dim>
-double KDTree<Dim>::distance(const Point<Dim> pointOne, const Point<Dim> pointTwo) const{
-
-  double dist = 0;
-  for(int i = 0; i < Dim; i++) {
-    dist += pow(pointOne[i] - pointTwo[i], 2);
-  }
-  return dist;
-} 
-
 template <int Dim>
-KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
-{
-    /**
-     * @todo Implement this function!
-     */
-
-  size = 0;
-  for (unsigned int i = 0; i < newPoints.size(); i++) {
-    points.push_back(newPoints[i]);
+int KDTree<Dim>::distance(const Point<Dim>& target, const Point<Dim>& query) const {
+  int d = 0;
+  for (int i = 0; i < Dim; i++) {
+    d = (target[i] - query[i])*(target[i]-query[i]);
+    d++;
+    return d;
   }
-  root = buildTree (0, 0, points.size() - 1); 
 }
 
-/* template <int Dim>
-void KDTree<Dim>::buildTree(int dimension, int left, int right, KDTreeNode*& currRoot) {
-  if(left <= right) {
-    int average = (left + right) / 2;
-    int newDim = (dimension + 1) %Dim;
-    currRoot = new KDTreeNode(quickSelect(left, right, average, dimension));
+//BIG BREAK - everything above this works
+// 
+//
+//
+//
+// big break 
 
-    buildTree(newDim, left, average - 1, currRoot -> left);
-    buildTree(newDim, average + 1, right, currRoot->right);
+template <int Dim>
+KDTree<Dim>::KDTree(const vector <Point<Dim>>& newPoints) {
+  size = 0; 
+
+  for (unsigned i = 0; i < newPoints.size(); i++) {
+    points.push_back(newPoints[i]);
   }
-} */
+  root = buildTree(0,0, points.size() - 1);
+}
+
 
 template <int Dim>
 typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int right) {
   KDTreeNode * currRoot = NULL;
-  if (left == right) {
-    int median = (left + right) / 2;
-    KDTree<Dim>::quickSelect(left, right, median, dim);
+  if (left <= right) {
+    int average = (left + right) / 2;
+    KDTree<Dim>::quickSelect(left, right, average, dim);
 
-    currRoot = new KDTreeNode(points [median]);
+    currentRoot = new KDTreeNode(points [average]);
     size++;
 
-    currRoot -> left = buildTree((dim+1)%Dim, left, median - 1);
-    currRoot -> right = buildTree((dim-1)%Dim, median + 1, right);
-    return currRoot;
+    currentRoot -> left = buildTree((dim+1)%Dim, left, average - 1);
+    currentRoot -> right = buildTree((dim-1)%Dim, average + 1, right);
+    return currentRoot;
+  } else {
+    return currentRoot;
   }
-  return currRoot;
 }
 
 template <int Dim>
@@ -211,12 +206,12 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     /**
      * @todo Implement this function!
      */
-    return _nearestNeighbor(query, 0, root);
+    return nNeighbor(query, 0, root);
     //return Point<Dim>();
 } 
 
 template <int Dim>
-Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension, KDTreeNode* currRoot) const {
+Point<Dim> KDTree<Dim>::nNeighbor(const Point<Dim>& query, int dimension, KDTreeNode* currRoot) const {
   if(isLeaf(currRoot)) {
     return currRoot -> point;
   }
@@ -226,7 +221,7 @@ Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension,
   bool path = smallerDimVal(query, currRoot -> point, dimension);
 
   if(path && currRoot -> left != NULL) {
-    nearest_ = _nearestNeighbor(query, next_dimension, currRoot -> left);
+    nearest_ = nNeighbor(query, next_dimension, currRoot -> left);
 
   } else if (currRoot -> right != NULL) {
     nearest_ = currRoot -> point;
@@ -238,9 +233,9 @@ Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension,
   Point<Dim> temp_nearest;
   if (radius >= splitDist) {
     if(currRoot -> left != NULL && !path) {
-      temp_nearest = _nearestNeighbor(query, next_dimension, currRoot -> left);
+      temp_nearest = nNeighbor(query, next_dimension, currRoot -> left);
     } else if(currRoot -> right != NULL) {
-      temp_nearest = _nearestNeighbor(query, next_dimension, currRoot -> right);
+      temp_nearest = nNeighbor(query, next_dimension, currRoot -> right);
     }
     if (shouldReplace(query, nearest_, temp_nearest)) {
       nearest_ = temp_nearest;
