@@ -272,6 +272,8 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+
+     vector <Point<Dim>> points;
 };
 
 #include "kdtree.hpp"

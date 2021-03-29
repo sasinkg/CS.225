@@ -68,15 +68,15 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 }
 
 template <int Dim>
-KDTree<Dim>::buildTree(int dimension, int left, int right, KDTreeNode*& currRoot) {
+void KDTree<Dim>::buildTree(int dimension, int left, int right, KDTreeNode*& currRoot) {
   if(left <= right) {
     int average = (left + right) / 2;
     int newDim = (dimension + 1) %Dim;
-    currRoot = new KDTreeNode(quickSelect(left, right, average, dimension);
-  }
+    currRoot = new KDTreeNode(quickSelect(left, right, average, dimension));
 
-  buildTree(newDim, left, average - 1, currRoot -> left);
-  buildTree(next_dim, med + 1, right, currRoot->right);
+    buildTree(newDim, left, average - 1, currRoot -> left);
+    buildTree(newDim, average + 1, right, currRoot->right);
+  }
 }
 
 template <int Dim>
@@ -89,7 +89,7 @@ KDTree<Dim>::KDTree::quickSelect(int left, int right, int a, int dim) {
   int pivotIndex = (left + right) / 2;
   pivotIndex = partition(left, right, pivotIndex, dim);
 
-  if (a = pivotIndex) {
+  if (a == pivotIndex) {
     return list[pivotIndex];
   } else if (a < pivotIndex) {
     return quickSelect(left, pivotIndex - 1, a, dim);
@@ -142,18 +142,18 @@ Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension,
     return currRoot -> point;
   }
 
-  Point<Dim> nearest;
+  Point<Dim> nearest_;
   int next_dimension = (dimension + 1) % Dim;
-  bool path = smallerDimValue(query, currRoot -> point, dimension)
+  bool path = smallerDimValue(query, currRoot -> point, dimension);
 
   if(path && currRoot -> left != NULL) {
-    nearest = _nearestNeighbor(query, next_dimension, currRoot -> left);
+    nearest_ = _nearestNeighbor(query, next_dimension, currRoot -> left);
 
   } else if (currRoot -> right != NULL) {
     nearest_ = currRoot -> point;
   }
 
-  double radius = distance(query, nearest);
+  double radius = distance(query, nearest_);
   double splitDist = (currRoot -> point[dimension] - query[dimension]) * (currRoot -> point[dimension] - query[dimension]);
  
   Point<Dim> temp_nearest;
@@ -163,11 +163,11 @@ Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension,
     } else if(currRoot -> right != NULL) {
       temp_nearest = _nearestNeighbor(query, next_dimension, currRoot -> right);
     }
-    if (shouldReplace(query, nearest, temp_nearest)) {
-      nearest = temp_nearest;
+    if (shouldReplace(query, nearest_, temp_nearest)) {
+      nearest_ = temp_nearest;
     }
   }
-  return nearest;
+  return nearest_;
 }
 
 template <int Dim>
