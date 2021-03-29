@@ -22,39 +22,31 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
      * @todo Implement this function!
      */
 
-    std::map <Point<3>, TileImage *> newMap;
-    vector <Point<3>> newPoint;
-
-    for(unsigned int i = 0; i < theTiles.size(); i++) {
-        LUVAPixel pixel = theTiles[i].getAverageColor();
-        Point<3> newPointTwo;
-
-        newPointTwo[0] = pixel.l;
-        newPointTwo[1] = pixel.u;
-        newPointTwo[2] = pixel.v;
-
-        newMap.insert(pair <Point<3>, TileImage *> (newPoint, &(theTiles[i]) ));
+    std::map <Point<3>, TileImage *> mapmap;
+    vector<Point<3>> pts;
+    for (unsigned i = 0; i < theTiles.size(); i++){
+        LUVAPixel luv = theTiles[i].getAverageColor();
+        Point<3> popo;
+        popo[0] = luv.l;
+        popo[1] = luv.u;
+        popo[2] = luv.v;
+        mapmap.insert(pair<Point<3>, TileImage *> (popo, &(theTiles[i]) ));
+        pts.push_back(popo);
     }
-
-    KDTree<3> newTree(newPoint);
-    //int rows = theSource.getRows();
-    //int col = theSource.getColumns();
-
-    MosaicCanvas * newCanvas = new MosaicCanvas(theSource.getRows(), theSource.getColumns());
-
-    for(int i = 0; i < theSource.getRows(); i++) {
-        for (int j = 0; j < theSource.getColumns(); j++) {
-            LUVAPixel pixel = theSource.getRegionColor(i, j);
-            Point<3> newPointTwo;
-
-            newPointTwo[0] = pixel.l;
-            newPointTwo[1] = pixel.u;
-            newPointTwo[2] = pixel.v;
-
-            Point<3> newPointThree = newTree.findNearestNeighbor(newPointTwo);
-            newCanvas -> setTile(i,j, newMap.find(newPointThree) -> second);
+    KDTree<3> treetree(pts);
+    int rows = theSource.getRows();
+    int cols = theSource.getColumns();
+    MosaicCanvas * mc = new MosaicCanvas (rows, cols);
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            LUVAPixel luv = theSource.getRegionColor(i, j);    
+            Point<3> popo;
+            popo[0] = luv.l;
+            popo[1] = luv.u;
+            popo[2] = luv.v;
+            Point<3> po = treetree.findNearestNeighbor(popo);
+            mc->setTile (i, j, mapmap.find(po)->second);
         }
     }
-    return newCanvas;
+    return mc;
 }
-

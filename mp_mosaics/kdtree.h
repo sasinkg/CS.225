@@ -42,10 +42,6 @@ class KDTree
       KDTreeNode(const Point<Dim> &point) : point(point), left(NULL), right(NULL) {}
     };
 
-
-    
-
-
   public:
     /**
      * Determines if Point a is smaller than Point b in a given dimension d.
@@ -263,20 +259,14 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
-
-     vector <Point<Dim>> points;
-     std::vector<Point<Dim>> list;
-    double distance(const Point<Dim> p1, const Point<Dim> p2) const;  
-    void quickSelect(int left, int right, int a, int dimension);
-    int partition(int left, int right, int pivotIndex, int dimension); 
-void dhelper(KDTreeNode* curr);
+    void quickselect (int left, int right, int k, int dim);
+    int partition (int left, int right, int pivotIndex, int dim);
     void swap (int left, int right);
-    //void swap(int left, int right); 
-    KDTreeNode * buildTree (int dim, int left, int right); 
-    void copy(const KDTree<Dim>& other); 
-    void destroy(KDTreeNode*& subRoot); 
-    bool isLeaf(KDTreeNode*& subRoot) const; 
-    Point<Dim> _nearestNeighbor(const Point<Dim>& query,int dimension,  KDTreeNode* currRoot) const;
+    KDTreeNode * buildTree (int dim, int left, int right);
+    Point<Dim> fnhelper(const Point <Dim>& q, int dim, KDTreeNode * curr) const;
+    void dhelper (KDTreeNode * curr);
+
+    vector <Point<Dim>> points;
 };
 
 #include "kdtree.hpp"
