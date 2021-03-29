@@ -89,7 +89,7 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int
     int addition = left + right;
     int average = addition / 2;
     KDTree<Dim>::quickSelect(left, right, average, dim);
-    currRoot = newKDTreeNode(points[average]);
+    currRoot = new KDTreeNode(points[average]);
     size++;
     
     currRoot -> right = buildTree((dim + 1) %Dim, average + 1, right);
@@ -107,8 +107,9 @@ void KDTree<Dim>::quickSelect(int left, int right, int k, int dim) {
     if (left == right) {
       return;
     }
+    int addition = left + right;
     int pivot = addition / 2;
-    pivot = partition (left, right, pivot, dim);
+    pivot = partition(left, right, pivot, dim);
 
     if (k == pivot) {
       return;
@@ -121,7 +122,10 @@ void KDTree<Dim>::quickSelect(int left, int right, int k, int dim) {
 }
 
 template <int Dim>
-int KDTree<Dim>::partition(int left, int right, int pivotIndex, int dim) {
+int KDTree<Dim>::partition(int left, int right, int pivot, int dim) {
+  
+  //int addition = left + right;
+  //int pivot = addition / 2;
   Point <Dim> pValue = points [pivot];
   swap(pivot, right);
 
@@ -136,6 +140,7 @@ int KDTree<Dim>::partition(int left, int right, int pivotIndex, int dim) {
     swap(right, store);
     return store;
   }
+  return false;
 }
 
 template <int Dim>
@@ -156,7 +161,7 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
 }
 
 template <int Dim>
-const KDTree<Dim>& KDTree<Dim>::operator=(const KDTREE<Dim>& rhs) {
+const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   if(this != &rhs) {
     delete *this;
     this = new KDTree(rhs);
@@ -224,12 +229,13 @@ Point<Dim> KDTree<Dim>::fnhelper(const Point <Dim>& query, int dim, KDTreeNode *
   }
   radius = ptotal;
 
-  double splitDist = std:pow(curr -> point[dim] - query[dim], 2);
+  double splitDist = std::pow(curr -> point[dim] - query[dim], 2);
   if (radius >= splitDist) {
-    if (wleft == true && cur -> right != NULL) {
+    if (wleft == true && curr -> right != NULL) {
       tempNearest = fnhelper(query, (dim+1) %dim, curr -> right);
-    } else if (curr -> left != NULL) P
-    tempNearest = fnhelper(query, (dim+1)%Dim, curr -> left);
+    } else if (curr -> left != NULL) {
+      tempNearest = fnhelper(query, (dim+1)%Dim, curr -> left);
+    }
   } 
   if (shouldReplace(query, nearest, tempNearest)) {
     nearest = tempNearest;
