@@ -267,7 +267,7 @@ class KDTree
      vector <Point<Dim>> points;
      std::vector<Point<Dim>> list;
     double distance(const Point<Dim> p1, const Point<Dim> p2) const;  
-    Point<Dim> quickSelect(int left, int right, int k, int dimension);
+    Point<Dim> quickSelect(int left, int right, int a, int dimension);
     int partition(int left, int right, int pivotIndex, int dimension); 
     //void swap(int left, int right); 
     KDTreeNode * buildTree (int dim, int left, int right); 
