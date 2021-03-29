@@ -18,8 +18,6 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
 
     if (first[curDim] < second[curDim] || first < second) {
       return true;
-    } else if (first[curDim] > second[curDim]) {
-      return false;
     } else {
       return false;
     }
