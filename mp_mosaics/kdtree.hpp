@@ -1,4 +1,4 @@
-KDtree.cpp
+//KDtree.cpp
 /**
  * @file kdtree.cpp
  * Implementation of KDTree class.
@@ -21,8 +21,9 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
       return first < second;
     } else if (first[curDim] < second[curDim]) {
       return true;
+    } else {
+      return false;
     }
-    return false;
     //return false;
 }
 
@@ -60,7 +61,7 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
     //return false;
 }
 
-/* template <int Dim>
+ template <int Dim>
 double KDTree<Dim>::distance(const Point<Dim> pointOne, const Point<Dim> pointTwo) const{
 
   double dist = 0;
@@ -68,7 +69,7 @@ double KDTree<Dim>::distance(const Point<Dim> pointOne, const Point<Dim> pointTw
     dist += pow(pointOne[i] - pointTwo[i], 2);
   }
   return dist;
-} */
+} 
 
 template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
@@ -103,7 +104,7 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int
     int median = (left + right) / 2;
     KDTree<Dim>::quickSelect(left, right, median, dim);
 
-    currRoot = newKDTreeNode(points [median]);
+    currRoot = new KDTreeNode(points [median]);
     size++;
 
     currRoot -> left = buildTree((dim+1)%Dim, left, median - 1);
@@ -222,7 +223,7 @@ Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension,
 
   Point<Dim> nearest_;
   int next_dimension = (dimension + 1) % Dim;
-  bool path = smallerDimValue(query, currRoot -> point, dimension);
+  bool path = smallerDimVal(query, currRoot -> point, dimension);
 
   if(path && currRoot -> left != NULL) {
     nearest_ = _nearestNeighbor(query, next_dimension, currRoot -> left);
@@ -260,7 +261,7 @@ bool KDTree<Dim>::isLeaf(KDTreeNode*& subRoot) const {
 void KDTree<Dim>::copy(const KDTree <Dim>& other) {
   this = new KDTree(other.list);
 }
-
+*/
 template <int Dim>
 void KDTree<Dim>::destroy(KDTreeNode*& subRoot) {
   if(subRoot == NULL) {
@@ -269,6 +270,6 @@ void KDTree<Dim>::destroy(KDTreeNode*& subRoot) {
   destroy(subRoot -> left);
   destroy(subRoot -> right);
   delete subRoot;
-}
+} 
 
 
