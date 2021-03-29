@@ -63,15 +63,7 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
     //return false;
 }
 
-template <int Dim>
-int KDTree<Dim>::distance(const Point<Dim>& target, const Point<Dim>& query) const {
-  int d = 0;
-  for (int i = 0; i < Dim; i++) {
-    d = (target[i] - query[i])*(target[i]-query[i]);
-    d++;
-    return d;
-  }
-}
+
 
 //BIG BREAK - everything above this works
 // 
@@ -266,5 +258,13 @@ void KDTree<Dim>::destroy(KDTreeNode*& subRoot) {
   destroy(subRoot -> right);
   delete subRoot;
 } 
-
+template <int Dim>
+double KDTree<Dim>::distance(const Point<Dim>& target, const Point<Dim>& query) const {
+  int d = 0;
+  for (int i = 0; i < Dim; i++) {
+    d = (target[i] - query[i])*(target[i]-query[i]);
+    d++;
+    return d;
+  }
+}
 
