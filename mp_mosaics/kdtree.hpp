@@ -16,12 +16,12 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
      * @todo Implement this function!
      */
 
-    if (first[curDim] < second[curDim] || first < second) {
+    if (first[curDim] == second[curDim]) {
+      return first < second;
+    } else if (first[curDim] < second[curDim]) {
       return true;
-    } else {
-      return false;
     }
-
+    return false;
     //return false;
 }
 
@@ -34,16 +34,32 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
      * @todo Implement this function!
      */
 
-    if(distance(target, currentBest) == distance(potential, target)) {
+    /* if(distance(target, currentBest) == distance(potential, target)) {
       return potential < currentBest;
     } else {
       return distance(target,potential) < distance(target, currentBest);
+    } */
+
+    double pointTotal = 0;
+    double countTotal = 0;
+
+    for(int i = 0; i < Dim; i++) {
+      pointTotal = (potential[i] - target[i]) * (potential[i] - target[i]);
+      pointTotal++;
+      countTotal = (currentBest[i] - target[i]) * (currentBest[i] - target[i]);
+      countTotal++;
     }
 
+    if (pointTotal == countTotal) {
+      return potential < currentBest;
+    } else if (pointTotal < countTotal) {
+      return true;
+    } 
+    return false;
     //return false;
 }
 
-template <int Dim>
+/* template <int Dim>
 double KDTree<Dim>::distance(const Point<Dim> pointOne, const Point<Dim> pointTwo) const{
 
   double dist = 0;
@@ -51,7 +67,7 @@ double KDTree<Dim>::distance(const Point<Dim> pointOne, const Point<Dim> pointTw
     dist += pow(pointOne[i] - pointTwo[i], 2);
   }
   return dist;
-}
+} */
 
 template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
@@ -67,7 +83,7 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
   root = buildTree (0, 0, points.size() - 1); 
 }
 
-template <int Dim>
+/* template <int Dim>
 void KDTree<Dim>::buildTree(int dimension, int left, int right, KDTreeNode*& currRoot) {
   if(left <= right) {
     int average = (left + right) / 2;
@@ -77,6 +93,23 @@ void KDTree<Dim>::buildTree(int dimension, int left, int right, KDTreeNode*& cur
     buildTree(newDim, left, average - 1, currRoot -> left);
     buildTree(newDim, average + 1, right, currRoot->right);
   }
+} */
+
+template <int Dim>
+typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int right) {
+  KDTreeNode * currRoot = NULL;
+  if (left == right) {
+    int median = (left + right) / 2;
+    KDTree<Dim>::quickSelect(left, right, median, dim);
+
+    currRoot = newKDTreeNode(points [median]);
+    size++;
+
+    currRoot -> left = buildTree((dim+1)%Dim, left, median - 1);
+    currRoot -> right = buildTree((dim-1)%Dim, median + 1, right);
+    return currRoot;
+  }
+  return currRoot;
 }
 
 template <int Dim>
