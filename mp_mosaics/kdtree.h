@@ -270,7 +270,7 @@ class KDTree
     Point<Dim> quickSelect(int left, int right, int k, int dimension);
     int partition(int left, int right, int pivotIndex, int dimension); 
     //void swap(int left, int right); 
-    KDTreeNode * buildTree (int left, int right, int dim, KDTreeNode*& currRoot); 
+    KDTreeNode * buildTree (int dim, int left, int right); 
     void copy(const KDTree<Dim>& other); 
     void destroy(KDTreeNode*& subRoot); 
     bool isLeaf(KDTreeNode*& subRoot) const; 
