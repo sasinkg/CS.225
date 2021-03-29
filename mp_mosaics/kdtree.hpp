@@ -17,10 +17,16 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
      * @todo Implement this function!
      */
 
-    if (first[curDim] < second[curDim]) {
+    // if (first[curDim] < second[curDim]) {
+    //   return true;
+    // } else if (first[curDim] == second[curDim]) {
+    //   return (first < second);
+    // } else {
+    //   return false;
+    // }
+    //return first[curDim] <= second[curDim];
+    if (first[curDim] <= second[curDim]) {
       return true;
-    } else if (first[curDim] == second[curDim]) {
-      return (first < second);
     } else {
       return false;
     }
@@ -173,87 +179,68 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     /**
      * @todo Implement this function!
      */
-    return fnhelper (query, 0, root);
+    return NeighborHelper (query, 0, root);
 }
 
 template <int Dim>
-Point<Dim> KDTree<Dim>::fnhelper(const Point <Dim>& query, int dim, KDTreeNode * curr) const{
+Point<Dim> KDTree<Dim>::NeighborHelper(const Point <Dim>& query, int dim, KDTreeNode * temp) const{
 
-    Point <Dim> nearest = curr->point;
-    Point <Dim> tempNearest = nearest;
-    bool wentleft = false; 
-    bool wentright = false;
-    if (curr->left == NULL && curr->right == NULL){
-        return curr->point;
+    if(leafTrue(temp)) {
+      return temp -> point;
     }
-    if (smallerDimVal(query, curr->point, dim) == true){
-        if (curr->left != NULL){
-            nearest = fnhelper (query, (dim+1)%Dim, curr->left);
+    Point <Dim> near = temp->point;
+    Point <Dim> tempNear = near;
+
+    bool wleft = false; 
+    bool wright = false;
+
+
+    if (smallerDimVal(query, temp->point, dim) == true){
+        if (temp->left != NULL){
+            near = NeighborHelper (query, (dim+1)%Dim, temp->left);
         }else{
-            nearest = fnhelper (query, (dim+1)%Dim, curr->right);
+            near = NeighborHelper (query, (dim+1)%Dim, temp->right);
         }
-        wentleft = true;
+        wleft = true;
     }else {
-        if (curr->right != NULL){
-            nearest = fnhelper (query, (dim+1)%Dim, curr->right);
+        if (temp->right != NULL){
+            near = NeighborHelper (query, (dim+1)%Dim, temp->right);
         }else{
-            nearest = fnhelper (query, (dim+1)%Dim, curr->left);
+            near = NeighborHelper (query, (dim+1)%Dim, temp->left);
         }
-        wentright = true;
+        wright = true;
     }
 
-    if (shouldReplace(query, nearest, curr->point)){
-        nearest = curr->point;
+    if (shouldReplace(query, near, temp->point)){
+        near = temp->point;
     }
-    double radius = -1;
-    double ptotal = 0;
+    double r = distance(query, near);
+    double p = 0;
+    double splitDist = (temp -> point[dim] - query[dim])*(temp->point[dim]-query[dim]);
     for (int i = 0; i < Dim; i++){
-        ptotal += (query[i] - nearest[i]) * (query[i] - nearest[i]);
+        p += (query[i] - near[i]) * (query[i] - near[i]);
     }
-    radius = ptotal;
+    r = p;
     
-    double splitDist = std::pow(curr->point[dim] - query[dim], 2); 
-    if (radius >= splitDist){
-        if (wentleft == true && curr->right != NULL){
-            tempNearest = fnhelper (query, (dim+1)%Dim, curr->right);
-        }else if (curr->left != NULL){
-            tempNearest = fnhelper (query, (dim+1)%Dim, curr->left);
+    //double splitDist = std::pow(temp->point[dim] - query[dim], 2); 
+    if (r >= splitDist){
+        if (wleft == true && temp->right != NULL){
+            tempNear = NeighborHelper (query, (dim+1)%Dim, temp->right);
+        }else if (temp->left != NULL){
+            tempNear = NeighborHelper (query, (dim+1)%Dim, temp->left);
         }
-        if (shouldReplace(query, nearest, tempNearest)){
-            nearest = tempNearest;
+        if (shouldReplace(query, near, tempNear)){
+            near = tempNear;
         }
     } 
-    return nearest; 
-    
-    /* if (size == 10 && Dim == 2){
-        root->point[0] = -6;
-        root->point[1] = 4; 
-    } 
-    if (size == 20 && Dim == 2){
-        root->point[0] = 42;
-        root->point[1] = 63;
-    } 
-    if (size == 6 && Dim == 2){
-        root->point[0] = -13;
-        root->point[1] = -1;
-    } 
-    if (size == 14 && Dim == 3 && query[0] == 50){
-        root->point[0] = 0;
-        root->point[1] = 100;
-        root->point[2] = 0;
-    } 
-    if (size == 14 && Dim == 3 && query[0] == 14){
-        root->point[0] = 0;
-        root->point[1] = 0;
-        root->point[2] = 0;
-    }
-    if (size == 10 && Dim == 3){
-        root->point[0] = 0;
-        root->point[1] = 2;
-        root->point[2] = 9;
-    }
-    
-
-    return root->point; */
+    return near; 
 }
 
+template <int Dim>
+bool KDTree<Dim>::leafTrue(KDTreeNode*& temp2) const {
+  if (temp2 == NULL) {
+    return false;
+  } else {
+    return temp2 -> left == NULL && temp2 -> right == NULL;
+  }
+}
