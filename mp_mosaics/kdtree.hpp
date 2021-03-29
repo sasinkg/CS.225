@@ -134,7 +134,63 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     /**
      * @todo Implement this function!
      */
+    return _nearestNeighbor(query, 0, root);
+    //return Point<Dim>();
+} 
 
-    return Point<Dim>();
+template <int Dim>
+Point<Dim> KDTree<Dim>::_nearestNeighbor(const Point<Dim>& query, int dimension, KDTreeNode* currRoot) const {
+  if(isLeaf(currRoot)) {
+    return currRoot -> point;
+  }
+
+  Point<Dim> nearest;
+  int next_dimension = (dimension + 1) % Dim;
+  bool path = smallerDimValue(query, currRoot -> point, dimension)
+
+  if(path && currRoot -> left != NULL) {
+    nearest = _nearestNeighbor(query, next_dimension, currRoot -> left);
+
+  } else if (currRoot -> right != NULL) {
+    nearest_ = currRoot -> point;
+  }
+
+  double radius = distance(query, nearest);
+  double splitDist = (currRoot -> point[dimension] - query[dimension]) * (currRoot -> point[dimension] - query[dimension]);
+ 
+  Point<Dim> temp_nearest;
+  if (radius >= splitDist) {
+    if(currRoot -> left != NULL && !path) {
+      temp_nearest = _nearestNeighbor(query, next_dimension, currRoot -> left);
+    } else if(currRoot -> right != NULL) {
+      temp_nearest = _nearestNeighbor(query, next_dimension, currRoot -> right);
+    }
+    if (shouldReplace(query, nearest, temp_nearest)) {
+      nearest = temp_nearest;
+    }
+  }
+  return nearest;
 }
 
+template <int Dim>
+bool KDTree<Dim>::isLeaf(KDTreeNode*& subRoot) const {
+  if(subRoot == NULL) {
+    return false;
+  }
+  return (subRoot -> left == NULL && subRoot -> right == NULL);
+}
+
+template <int Dim>
+void KDTree<Dim>::copy(const KDTree <Dim>& other) {
+  this = new KDTree(other.list);
+}
+
+template <int Dim>
+void KDTree<Dim>::destroy(KDTreeNode*& subRoot) {
+  if(subRoot == NULL) {
+    return;
+  }
+  destroy(subRoot -> left);
+  destroy(subRoot -> right);
+  delete subRoot;
+}
