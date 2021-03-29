@@ -113,22 +113,46 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int
 }
 
 template <int Dim>
-Point<Dim> 
-KDTree<Dim>::KDTree::quickSelect(int left, int right, int a, int dim) {
-  if (left == right) {
-    return list[left];
-  }
+void KDTree<Dim>:: quickSelect(int left, int right, int a, int dim) {
+  if (left != right) {
+    if (left == right) {
+      return;
+    }
 
-  int pivotIndex = (left + right) / 2;
-  pivotIndex = partition(left, right, pivotIndex, dim);
+    int pivotIndex = (left + right) / 2;
+    pivotIndex = partition(left, right, pivotIndex, dim);
 
-  if (a == pivotIndex) {
-    return list[pivotIndex];
-  } else if (a < pivotIndex) {
-    return quickSelect(left, pivotIndex - 1, a, dim);
-  } else {
-    return quickSelect(pivotIndex + 1, right, a, dim);
+    if (a == pivotIndex) {
+      return;
+    } else if (a < pivotIndex) {
+      return quickSelect(left, pivotIndex - 1, a, dim);
+    } else {
+      return quickSelect(pivotIndex + 1, right, a, dim);
+    }
   }
+}
+
+template <int Dim>
+int KDTree<Dim>::partition(int left, int right, int pivotIndex, int dim) {
+  Point <Dim> pivotValue = points [pivotIndex];
+  swap(pivotIndex, right); 
+  int storeIndex = left;
+
+  for(int i = left; i < right; i++) {
+    if(smallerDimVal(points[i], pivotValue, dim)) {
+      swap (storeIndex, i);
+      storeIndex++;
+    }
+  }
+  swap(right, storeIndex);
+  return storeIndex;
+}
+
+template <int Dim>
+void KDTree<Dim>::swap(int left, int right) {
+  Point <Dim> temp = points[left];
+  points[left] = points[right];
+  points[right] = temp;
 }
 
 template <int Dim>
@@ -138,8 +162,12 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
    */
 
    //if (distance (target, current ))
-   copy(other);
-
+  // copy(other);
+  for(unsigned i = 0; i < other.points.size(); i++) {
+    points.at(other.points[i]);
+  }
+  size = other.size();
+  root = buildTree(0,0, points.size() - 1);
 
 }
 
@@ -148,8 +176,14 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
-  destroy(this -> root);
+  /* destroy(this -> root);
   copy(rhs);
+  return *this; */
+
+  if(this != &rhs) {
+    delete *this;
+    this = new KDTree(rhs);
+  }
   return *this;
 }
 
@@ -157,6 +191,16 @@ template <int Dim>
 KDTree<Dim>::~KDTree() {
 
    destroy(root);
+}
+
+template <int Dim>
+void KDTree<Dim>::dhelper (KDTreeNode * curr) {
+  if(curr == NULL) {
+    return;
+  }
+  dhelper(curr -> left);
+  dhelper(curr -> right);
+  delete curr;
 }
 
 template <int Dim>
@@ -211,10 +255,10 @@ bool KDTree<Dim>::isLeaf(KDTreeNode*& subRoot) const {
   return (subRoot -> left == NULL && subRoot -> right == NULL);
 }
 
-template <int Dim>
+/* template <int Dim>
 void KDTree<Dim>::copy(const KDTree <Dim>& other) {
   this = new KDTree(other.list);
-}
+} */
 
 template <int Dim>
 void KDTree<Dim>::destroy(KDTreeNode*& subRoot) {
