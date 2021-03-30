@@ -13,6 +13,7 @@ template <int Dim>
 bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
                                 const Point<Dim>& second, int curDim) const
 {
+    if (first[curDim] == second[curDim]) return (first<second);
     /**
      * @todo Implement this function!
      */
@@ -25,7 +26,7 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
     //   return false;
     // }
     //return first[curDim] <= second[curDim];
-    if (first[curDim] <= second[curDim]) {
+    if (first[curDim] < second[curDim]) {
       return true;
     } else {
       return false;
@@ -49,14 +50,7 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
       return false;
 }
 
-template <int Dim>
-int KDTree<Dim>::distance(const Point<Dim>& target, const Point<Dim>& temp) const {
-  int d = 0;
-  for (int i = 0; i < Dim; i++) {
-    d += (target[i] - temp[i]) * (target[i] - temp[i]);
-  }
-  return d;
-}
+
 
 template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints) {
@@ -64,12 +58,12 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints) {
     size = newPoints.size();
     if(size != 0) {
       for(unsigned i = 0; i < newPoints.size(); i++) {
-        points.push_back(newPoints[i]);
+        records.push_back(newPoints[i]);
       }
     } else {
       root = NULL;
   }
-  root = buildTree(0, 0, points.size() - 1);
+  root = buildTree(0, 0, records.size() - 1);
 }
 
 template <int Dim>
@@ -80,7 +74,7 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int
   
     int average = (left + right) / 2;
     KDTree<Dim>::quickSelect(left, right, average, dim);
-    temp = new KDTreeNode(points[average]);
+    temp = new KDTreeNode(records[average]);
     size++;
     
     temp -> right = buildTree((dim + 1) %Dim, average + 1, right);
@@ -89,7 +83,7 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int
   }
   return temp;
 }
-
+//quickselect
 template <int Dim>
 void KDTree<Dim>::quickSelect(int left, int last, int k, int dim) {
   if (left != last) {
@@ -98,7 +92,7 @@ void KDTree<Dim>::quickSelect(int left, int last, int k, int dim) {
     }
     
     int pivot = (left + last) / 2;
-    pivot = partition(left, last, pivot, dim);
+    pivot = quickSelectPartition(left, last, pivot, dim);
 
     if (k == pivot) {
       return;
@@ -111,41 +105,40 @@ void KDTree<Dim>::quickSelect(int left, int last, int k, int dim) {
 }
 
 template <int Dim>
-int KDTree<Dim>::partition(int left, int right, int pivot, int dim) {
+int KDTree<Dim>::quickSelectPartition(int left, int right, int pivot, int dim) {
   
   
-  Point <Dim> pValue = points [pivot];
-  swap(pivot, right);
+  Point <Dim> pValue = records [pivot];
+  Point<Dim> tValue = records[pivot];
+  Point<Dim> temp = tValue;
+
+  records[pivot] = records[right];
+  records[right] = tValue;
 
   int store = left;
 
   for (int i = left; i < right; i++) {
-    if (smallerDimVal(points[i], pValue, dim)) {
-      swap(store, i);
+    if (smallerDimVal(records[i], pValue, dim)) {
+      temp = records[i];
+      records[i] = records[store];
+      records[store] = temp;
       store++;
     }
   }
-    swap(right, store);
-    return store;
+      temp = records[store];
+      records[store] = records[right];
+      records[right] = temp;
+      
+      return store;
   
   //return false;
 }
 
-template <int Dim>
-void KDTree<Dim>::swap (int left, int right) {
-  Point <Dim> temp = points[left];
-  points[left] = points[right];
-  points[right] = temp;
-}
+
 
 template <int Dim>
 KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
-  for(unsigned i = 0; i < other.points.size(); i++) {
-    points.at(other.points[i]);
-  }
-
-  size = other.size;
-  root = buildTree(0,0,points.size() - 1);
+  copy(other);
 }
 
 template <int Dim>
@@ -159,19 +152,10 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
 
 template <int Dim>
 KDTree<Dim>::~KDTree() {
-  dhelper(root);
+  destroyTheBoys(root);
 }
 
-template <int Dim> 
-void KDTree<Dim>::dhelper(KDTreeNode *curr) {
-  if (curr == NULL) {
-    return;
-  }
 
-  dhelper(curr -> left);
-  dhelper(curr -> right);
-  delete curr;
-}
 
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
@@ -185,53 +169,49 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 template <int Dim>
 Point<Dim> KDTree<Dim>::NeighborHelper(const Point <Dim>& query, int dim, KDTreeNode * temp) const{
 
-    if(leafTrue(temp)) {
+    if(leafTrue(temp)) { //checkNULL
       return temp -> point;
     }
+
+    bool check1;
+    bool check2;
+    int dim2;
     Point <Dim> near = temp->point;
     Point <Dim> tempNear = near;
 
-    bool wleft = false; 
-    bool wright = false;
-
-
-    if (smallerDimVal(query, temp->point, dim) == true){
-        if (temp->left != NULL){
-            near = NeighborHelper (query, (dim+1)%Dim, temp->left);
-        }else{
-            near = NeighborHelper (query, (dim+1)%Dim, temp->right);
-        }
-        wleft = true;
-    }else {
-        if (temp->right != NULL){
-            near = NeighborHelper (query, (dim+1)%Dim, temp->right);
-        }else{
-            near = NeighborHelper (query, (dim+1)%Dim, temp->left);
-        }
-        wright = true;
-    }
+    if (smallerDimVal(query, temp->point, dim) == true && temp -> left != NULL){
+      check1 = true;
+      dim2 = (dim + 1) % Dim;
+      near = NeighborHelper (query, dim2, temp -> left);
+    } else if (smallerDimVal(query, temp -> point, dim) == false && temp -> right != NULL) {
+      check2 = true;
+      dim2 = (dim + 1) % Dim;
+      near = NeighborHelper(query, dim2, temp -> right);
+    } 
 
     if (shouldReplace(query, near, temp->point)){
         near = temp->point;
     }
     double r = distance(query, near);
-    double p = 0;
+    double p = r;
     double splitDist = (temp -> point[dim] - query[dim])*(temp->point[dim]-query[dim]);
-    for (int i = 0; i < Dim; i++){
-        p += (query[i] - near[i]) * (query[i] - near[i]);
-    }
+    // for (int i = 0; i < Dim; i++){
+    //     p += (query[i] - near[i]) * (query[i] - near[i]);
+    // }
     r = p;
-    
-    //double splitDist = std::pow(temp->point[dim] - query[dim], 2); 
+
     if (r >= splitDist){
-        if (wleft == true && temp->right != NULL){
-            tempNear = NeighborHelper (query, (dim+1)%Dim, temp->right);
-        }else if (temp->left != NULL){
-            tempNear = NeighborHelper (query, (dim+1)%Dim, temp->left);
+      dim2 = (dim + 1) % Dim; 
+      if (check1 == true) {
+        if (temp -> right != NULL){
+          tempNear = NeighborHelper (query, dim2, temp->right);
         }
-        if (shouldReplace(query, near, tempNear)){
-            near = tempNear;
-        }
+      } else if (temp->left != NULL) {          
+        tempNear = NeighborHelper(query, dim2, temp->left);
+      }
+      if (shouldReplace(query, near, tempNear)){
+          near = tempNear;
+      }
     } 
     return near; 
 }
@@ -243,4 +223,33 @@ bool KDTree<Dim>::leafTrue(KDTreeNode*& temp2) const {
   } else {
     return temp2 -> left == NULL && temp2 -> right == NULL;
   }
+}
+
+template <int Dim> 
+void KDTree<Dim>::destroyTheBoys(KDTreeNode* curr) {
+  if (curr == NULL) {
+    return;
+  }
+  destroyTheBoys(curr -> left);
+  destroyTheBoys(curr -> right);
+  delete curr;
+}
+template <int Dim>
+int KDTree<Dim>::distance(const Point<Dim>& target, const Point<Dim>& temp) const {
+  int d = 0;
+  for (int i = 0; i < Dim; i++) {
+    d += (target[i] - temp[i]) * (target[i] - temp[i]);
+  }
+  return d;
+}
+template <int Dim>
+void KDTree<Dim>::swap (int left, int right) {
+  Point <Dim> temp = records[left];
+  records[left] = records[right];
+  records[right] = temp;
+}
+
+template <int Dim>
+void KDTree<Dim>::copy(const KDTree<Dim>& other) {
+  this = new KDTree(other.records);
 }

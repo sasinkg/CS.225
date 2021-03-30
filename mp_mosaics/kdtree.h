@@ -42,14 +42,12 @@ class KDTree
       KDTreeNode(const Point<Dim> &point) : point(point), left(NULL), right(NULL) {}
     };
 
-vector <Point<Dim>> points;
-    std::vector<Point<Dim>> list;
+     vector <Point<Dim>> records;
+
     int distance(const Point<Dim>& target, const Point<Dim>& query) const;  
     void quickSelect(int left, int right, int k, int dim);
-    int partition(int left, int right, int pivot, int dim); 
-    
-void copy(const KDTree<Dim>& other); 
-    void destroy(KDTreeNode*& subRoot); 
+    int quickSelectPartition(int left, int right, int pivot, int dim); 
+    void copy(const KDTree<Dim>& other);
     bool leafTrue(KDTreeNode*& temp2) const;
 
   public:
@@ -271,7 +269,7 @@ void copy(const KDTree<Dim>& other);
      */
 
     
-    void dhelper(KDTreeNode* curr);
+    void destroyTheBoys (KDTreeNode* curr);
     Point<Dim> NeighborHelper(const Point<Dim>& q, int dim, KDTreeNode * temp) const;
     void swap (int left, int right);
     KDTreeNode * buildTree (int dim, int left, int right); 
