@@ -22,6 +22,8 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
      * @todo Implement this function!
      */
 
+    int row = theSource.getRows();
+    int col = theSource.getColumns();
     map <Point<3>, unsigned> newMap;
     vector<Point<3>> index;
 
@@ -30,17 +32,14 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
         newMap.insert({luva, i});
         index.push_back(luva);
     }
-
     KDTree<3> tree(index);
-    int row = theSource.getRows();
-    int col = theSource.getColumns();
     MosaicCanvas* newCanvas = new MosaicCanvas(row, col);
     for(int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
-            Point<3> luva = convertToXYZ(theSource.getRegionColor(i,j));
-            Point<3> tiles = tree.findNearestNeighbor(luva);
-            unsigned newIndex = newMap[tiles];
-            newCanvas -> setTile(i,j,&theTiles[newIndex]);
+           // Point<3> luva = ;
+            Point<3> tiles = tree.findNearestNeighbor(convertToXYZ(theSource.getRegionColor(i,j)));
+            //unsigned newIndex = ;
+            newCanvas -> setTile(i, j, &theTiles[newMap[tiles]]);
         }
     }
     return newCanvas;
