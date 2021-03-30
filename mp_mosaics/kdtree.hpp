@@ -69,37 +69,37 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints) {
 template <int Dim>
 typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildTree(int dim, int left, int right) {
   KDTreeNode * temp = NULL;
-  
+  int dim2 = (dim + 1) %Dim;
+  int average = (left + right) / 2;
   if(left <= right) {
   
-    int average = (left + right) / 2;
+    
     KDTree<Dim>::quickSelect(left, right, average, dim);
     temp = new KDTreeNode(records[average]);
     size++;
-    
-    temp -> right = buildTree((dim + 1) %Dim, average + 1, right);
-    temp -> left = buildTree((dim + 1) %Dim, left, average - 1);
+    temp -> right = buildTree(dim2, average + 1, right);
+    temp -> left = buildTree(dim2, left, average - 1);
     return temp;
   }
   return temp;
 }
 //quickselect
 template <int Dim>
-void KDTree<Dim>::quickSelect(int left, int last, int k, int dim) {
-  if (left != last) {
-    if (last == left) {
+void KDTree<Dim>::quickSelect(int left, int right, int k, int dim) {
+  if (left != right) {
+    if (right == left) {
       return;
     }
     
-    int pivot = (left + last) / 2;
-    pivot = quickSelectPartition(left, last, pivot, dim);
+    int pivot = (right + last) / 2;
+    pivot = quickSelectPartition(left, right, pivot, dim);
 
     if (k == pivot) {
       return;
     } else if (k < pivot) {
       quickSelect(left, pivot - 1, k, dim);
     } else {
-      quickSelect(pivot + 1, last, k, dim);
+      quickSelect(pivot + 1, right, k, dim);
     }
   }
 }
