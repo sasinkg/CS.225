@@ -91,13 +91,13 @@ void KDTree<Dim>::quickSelect(int left, int right, int k, int dim) {
       return;
     }
     
-    int pivot = (right + last) / 2;
+    int pivot = (right + left) / 2;
     pivot = quickSelectPartition(left, right, pivot, dim);
 
-    if (k == pivot) {
-      return;
-    } else if (k < pivot) {
+    if (k < pivot) {
       quickSelect(left, pivot - 1, k, dim);
+    } else if (k == pivot) {
+      return;
     } else {
       quickSelect(pivot + 1, right, k, dim);
     }
