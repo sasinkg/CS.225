@@ -33,6 +33,10 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
+
+  unsigned int w = 0;
+  unsigned int h = 0;
+  unsigned int 
 }
 
 /**
