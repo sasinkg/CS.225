@@ -24,6 +24,11 @@
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+
+  newPNG = png;
+  newStart = start;
+  newTolerance = tolerance;
+  stack.push(start);
 }
 
 /**
@@ -31,7 +36,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return ImageTraversal::Iterator(this, newStart, newPNG, newTolerance);
 }
 
 /**
@@ -47,6 +52,7 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
   /** @todo [Part 1] */
+  stack.push(point);
 }
 
 /**
@@ -54,7 +60,11 @@ void DFS::add(const Point & point) {
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  //return Point(0, 0);
+
+  Point curr = stack.top();
+  stack.pop();
+  return curr;
 }
 
 /**
@@ -62,7 +72,8 @@ Point DFS::pop() {
  */
 Point DFS::peek() const {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  return stack.top();
+  //return Point(0, 0);
 }
 
 /**
@@ -70,5 +81,5 @@ Point DFS::peek() const {
  */
 bool DFS::empty() const {
   /** @todo [Part 1] */
-  return true;
+  return stack.empty();
 }
