@@ -33,10 +33,10 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
-
-  unsigned int w = 0;
+  IT = NULL;
+  /* unsigned int w = 0;
   unsigned int h = 0;
-  unsigned int 
+  unsigned int  */
 }
 
 /**
@@ -46,7 +46,18 @@ ImageTraversal::Iterator::Iterator() {
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  return *this;
+  //return *this;
+
+  IT = itrav;
+  sp = spo;
+  pngg = png1;
+  toleranceg = tol;
+  curr = IT -> peek();
+
+  for(unsigned i = 0; i < pngg.height() * pngg.width(); i++) {
+    visit.push_back(false); 
+  }
+
 }
 
 /**
@@ -57,6 +68,20 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
   return Point(0, 0);
+  if (!IT -> empty()) {
+    curr = IT -> pop();
+    p.x = curr.x;
+    p.y = curr.y;
+
+    visit.at(p.x + p.y*pngg.width()) = 1;
+    
+    p.x = curr.x + 1;
+    p.y = curr.y;
+    if(checkValid (sp,p)) {
+      IT -> add(p);
+    }
+
+  }
 }
 
 /**
