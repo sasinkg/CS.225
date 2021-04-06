@@ -44,7 +44,7 @@ ImageTraversal::Iterator::Iterator() {
  *
  * Advances the traversal of the image.
  */
-ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
+ImageTraversal::Iterator::Iterator(ImageTraversal * itrav, Point spo, PNG png1, double tol){
   /** @todo [Part 1] */
   //return *this;
 
@@ -65,9 +65,9 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  *
  * Accesses the current Point in the ImageTraversal.
  */
-Point ImageTraversal::Iterator::operator*() {
+ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  Point p (0, 0);
   if (!IT -> empty()) {
     curr = IT -> pop();
     p.x = curr.x;
@@ -80,8 +80,46 @@ Point ImageTraversal::Iterator::operator*() {
     if(checkValid (sp,p)) {
       IT -> add(p);
     }
-
+    
+    p.x = curr.x;
+    p.y = curr.y + 1;
+    if(checkValid (sp,p)) {
+      IT -> add(p);
+    }
+    p.x = curr.x;
+    p.y = curr.y - 1;
+    if(checkValid (sp,p)) {
+      IT -> add(p);
+    }
+    p.x = curr.x - 1;
+    p.y = curr.y;
+    if(checkValid (sp,p)) {
+      IT -> add(p);
+    }
+    while (!IT -> empty()) {
+      curr = IT -> peek();
+      if(visit.at(curr.x + curr.y * pngg.width())) {
+        IT -> pop();
+      } else {
+        break;
+      } if (IT -> empty()) {
+        curr = sp;
+        break;
+      }
+      curr = IT -> peek();
+    }
   }
+  return *this;
+}
+
+/**
+ * Iterator inequality operator.
+ *
+ * Determines if two iterators are not equal.
+ */
+Point ImageTraversal::Iterator::operator*() {
+  /** @todo [Part 1] */
+  return curr;
 }
 
 /**
@@ -91,6 +129,38 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return false;
+
+	  bool thisEmpty, otherEmpty;
+	  if (IT == NULL){
+			thisEmpty = true;
+	  }else{
+			thisEmpty = IT -> empty();
+	  }
+	  if (other.IT == NULL){
+			otherEmpty = true;
+	  }else{
+			otherEmpty = other.IT -> empty();
+	  }
+	  return !(thisEmpty && otherEmpty);
+
 }
+
+bool ImageTraversal::Iterator::checkValid (Point sp, Point p) {
+	if (p.x >= pngg.width()){
+		return false;
+	}
+	if (p.y >= pngg.height()){
+		return false;
+	}
+	if (toleranceg <= calculateDelta(pngg.getPixel(sp.x, sp.y) , pngg.getPixel(p.x, p.y)) ) {
+		return false;
+	}
+	if (visit.at(p.x + p.y * pngg.width()) == 1){
+		return false;
+	}
+	return true;
+}
+
+
+
 

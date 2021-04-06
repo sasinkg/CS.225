@@ -7,6 +7,7 @@
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
+#include <vector>
 
 using namespace cs225;
 
@@ -47,7 +48,8 @@ public:
     Point curr;
     PNG pngg;
     double toleranceg;
-    std::vector <int> visit;
+    std::vector <int> visit; 
+
   };
 
   /**
