@@ -34,8 +34,8 @@ public:
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    bool checkValid(Point curr);
-    bool boundaries(Point curr);
+    //bool checkValid(Point curr);
+    //bool boundaries(Point curr);
     ImageTraversal * trav;
     bool checkTolerance(Point next);
 
@@ -51,7 +51,7 @@ public:
 
   };
   protected:
-    Point temp;
+    Point newStart;
     PNG newPNG;
     double newTolerance;
   /**

@@ -36,7 +36,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator(this, newStart, newPNG, newTolerance);
+  return ImageTraversal::Iterator(this, newStart);
 }
 
 /**

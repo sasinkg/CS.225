@@ -31,13 +31,13 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
-
+PNG newPNG;
+  Point newStart;
+  double newTolerance;
 private:
   /** @todo [Part 1] */
   /** add private members here*/
-
-  PNG newPNG;
-  Point newStart;
   std::queue<Point> queue;
-  double newTolerance;
+
+  
 };

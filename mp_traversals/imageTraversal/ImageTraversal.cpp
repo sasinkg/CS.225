@@ -65,26 +65,24 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p){
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   Point newCurr = this -> trav -> pop();
 
-  if(!checkValid(newCurr)) {
+  if(queue[newCurr.x][newCurr.y] == true) {
     Point right(curr.x + 1, curr.y);
-    if (right.x < (this -> trav -> newPNG.width()) && right.y < this -> trav -> newPNG.height() = true) {
+    if (right.x < (this -> trav -> newPNG.width()) && right.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(right);
     }
-
-    
     
     Point left(curr.x, curr.y - 1);
-    if (left.x < (this -> trav -> newPNG.width()) && left.y < this -> trav -> newPNG.height() = true) {
+    if (left.x < (this -> trav -> newPNG.width()) && left.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(left);
     }
 
     Point up(curr.x - 1, curr.y);
-    if (up.x < (this -> trav -> newPNG.width()) && up.y < this -> trav -> newPNG.height() = true) {
+    if (up.x < (this -> trav -> newPNG.width()) && up.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(up);
     }
 
     Point down(curr.x, curr.y + 1);
-    if (down.x < (this -> trav -> newPNG.width()) && down.y < this -> trav -> newPNG.height() = true) {
+    if (down.x < (this -> trav -> newPNG.width()) && down.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(down);
     } 
 
@@ -97,7 +95,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   } 
   Point next = this -> trav -> peek();
 
-  while(queue[next.x][next.y] = true || !checkTolerance(next) ) {
+  while(queue[next.x][next.y] == true || !checkTolerance(next) ) {
     next = this -> trav -> pop();
     if ( this -> trav -> empty()) {
       this -> trav = NULL;
@@ -105,53 +103,8 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
     }
     next = this -> trav -> peek();
   }
-  
-  
-  
-  /** @todo [Part 1] */
-  /* Point p (0, 0);
-  if (!trav -> empty()) {
-    temp = trav -> pop();
-    p.x = temp.x;
-    p.y = temp.y;
-
-    queue.at(p.x + p.y*newPNG.width()) = 1;
-    
-    p.x = temp.x + 1;
-    p.y = temp.y;
-    if(checkValid (curr,p)) {
-      trav -> add(p);
-    }
-    
-    p.x = temp.x;
-    p.y = temp.y + 1;
-    if(checkValid (curr,p)) {
-      trav -> add(p);
-    }
-    p.x = temp.x;
-    p.y = temp.y - 1;
-    if(checkValid (curr,p)) {
-      trav -> add(p);
-    }
-    p.x = curr.x - 1;
-    p.y = curr.y;
-    if(checkValid (curr,p)) {
-      trav -> add(p);
-    }
-    while (!trav -> empty()) {
-      curr = trav -> peek();
-      if(queue.at(temp.x + temp.y * newPNG.width())) {
-        trav -> pop();
-      } else {
-        break;
-      } if (trav -> empty()) {
-        temp = curr;
-        break;
-      }
-      curr = trav -> peek();
-    }
-  }
-  return *this; */
+  this -> curr = next;
+  return *this;
 } 
 
 /**
@@ -161,7 +114,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return temp;
+  return curr;
 }
 
 /**
@@ -187,7 +140,7 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other)
 
 }
 
-bool ImageTraversal::Iterator::checkValid (Point curr, Point p) {
+/* bool ImageTraversal::Iterator::checkValid (Point curr, Point p) {
 	if (p.x >= newPNG.width()){
 		return false;
 	}
@@ -201,7 +154,7 @@ bool ImageTraversal::Iterator::checkValid (Point curr, Point p) {
 		return false;
 	}
 	return true;
-}
+} */
 
 
 

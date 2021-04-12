@@ -32,11 +32,12 @@ public:
   Point peek() const;
   bool empty() const;
 
-private:
-	/** @todo [Part 1] */
-	/** add private members here*/
   PNG newPNG;
   Point newStart;
   double newTolerance;
+
+private:
+	/** @todo [Part 1] */
+	/** add private members here*/
   std::stack <Point> stack;
 };
