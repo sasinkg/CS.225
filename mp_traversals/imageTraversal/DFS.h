@@ -31,9 +31,15 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
-  bool bounds(const Point & point);
+  bool boundaries(const Point & point);
+
+   PNG newPNG;
+   Point newStart;
+   double newTolerance;
+
 private:
 	/** @todo [Part 1] */
 	/** add private members here*/ 
-  std::stack<Point> stack; 
+  std::stack<Point> stack;
+  
 };

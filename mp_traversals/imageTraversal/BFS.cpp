@@ -24,10 +24,11 @@ using namespace cs225;
  */
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */ 
-  pic = png; 
-  startPoint = start;  
-  queue.push(startPoint); 
-  delta = tolerance;
+  newPNG = png; 
+  newStart = start;  
+  newTolerance = tolerance;
+  queue.push(newStart); 
+
 }
 
 /**
@@ -37,7 +38,7 @@ ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */ 
     //this might be an error 
   
-  return ImageTraversal::Iterator(this, startPoint);
+  return ImageTraversal::Iterator(this, newStart, newPNG, newTolerance);
 }
 
 /**
@@ -53,30 +54,10 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) { 
   /** @todo [Part 1] */   
-
-queue.push(point);
-
-/*
- Point right(point.x+1,point.y); 
- if(bounds(right)){queue.push(right);}    
-
- Point down(point.x,point.y+1); 
- if(bounds(down)){queue.push(down);} 
- 
-
- Point up(point.x-1,point.y); 
- if(bounds(up)){queue.push(up);} 
- 
-
- Point left(point.x,point.y-1); 
- if(bounds(left)){queue.push(left);} 
-*/ 
-
+  queue.push(point);
 }
-bool BFS::bounds(const Point & point){ 
-if(point.x < pic.width() && point.y < pic.height()){return true;} 
-else{return false;}
-}
+
+
 
 /**
  * Removes and returns the current Point in the traversal.
@@ -102,4 +83,12 @@ Point BFS::peek() const {
 bool BFS::empty() const {
   /** @todo [Part 1] */
   return queue.empty();
+}
+bool BFS::boundaries(const Point & point){ 
+  if(point.x < newPNG.width() && point.y < newPNG.height()) {
+    return true;
+  } 
+  else {
+    return false;
+  }
 }

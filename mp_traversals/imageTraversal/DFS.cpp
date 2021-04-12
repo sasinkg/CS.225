@@ -24,10 +24,10 @@
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */ 
-  pic = png; 
-  startPoint = start;  
-  stack.push(startPoint); 
-  delta = tolerance;
+  newPNG = png; 
+  newStart = start;  
+  stack.push(newStart); 
+  newTolerance = tolerance;
 }
 
 /**
@@ -35,7 +35,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator(this, startPoint);
+  return ImageTraversal::Iterator(this, newStart, newPNG, newTolerance);
 }
 
 /**
@@ -70,18 +70,22 @@ stack.push(point);
 */
 
 }
-bool DFS::bounds(const Point & point){ 
-if(point.x < pic.width() && point.y < pic.height()){return true;} 
-else{return false;}
+bool DFS::boundaries(const Point & point){ 
+  if(point.x < newPNG.width() && point.y < newPNG.height()) {
+    return true;
+  } 
+  else {
+    return false;
+  }
 }
 /**
  * Removes and returns the current Point in the traversal.
  */
 Point DFS::pop() {
   /** @todo [Part 1] */ 
-  Point ret = stack.top(); 
+  Point temp1 = stack.top(); 
   stack.pop();
-  return ret;
+  return temp1;
 }
 
 /**

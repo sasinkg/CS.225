@@ -1,15 +1,12 @@
 #include <cmath>
 #include <iterator>
 #include <iostream>
-
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
-
-#include "ImageTraversal.h" 
+#include "ImageTraversal.h"
 
 using namespace std;
-
 /**
  * Calculates a metric for the difference between two pixels, used to
  * calculate if a pixel is within a tolerance.
@@ -33,106 +30,36 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 /**
  * Default iterator constructor.
  */
-ImageTraversal::Iterator::Iterator() : traversal(NULL){
-  /** @todo [Part 1] */ 
-
+ImageTraversal::Iterator::Iterator() : trav(NULL) {
+  /** @todo [Part 1] */
+  //trav = NULL;
+  /* unsigned int w = 0;
+  unsigned int h = 0;
+  unsigned int  */
 }
-ImageTraversal::Iterator::Iterator(ImageTraversal* t, Point p) {
-  /** @todo [Part 1] */ 
-  traversal = t;  
-  point = p; 
 
-  matrix.resize(t->pic.width()); 
-
-  for(unsigned int i = 0;  i < t->pic.width(); ++i){ 
-   
-   matrix[i] = vector<bool>(t->pic.height());  
-
-  }
-}
 /**
  * Iterator increment opreator.
  *
  * Advances the traversal of the image.
  */
-ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  /** @todo [Part 1] */ 
-  Point current = this->traversal->pop();
+ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne, double tol){
+  /** @todo [Part 1] */
+  //return *this;
+  trav = newTrav;
+  curr = p;
+  newPNG = pngOne;
+  newTolerance = tol;
 
-   if(!visited(current)){  
-   Point right(point.x+1,point.y); 
-   if(bounds(right)){this->traversal->add(right);}    
+  //queue.resize(newTrav -> newPNG.width());
 
-   Point down(point.x,point.y+1); 
-   if(bounds(down)){this->traversal->add(down);} 
- 
-
-   Point up(point.x-1,point.y); 
-   if(bounds(up)){this->traversal->add(up);} 
- 
-
-   Point left(point.x,point.y-1); 
-   if(bounds(left)){this->traversal->add(left);}  
-
-    matrix[current.x][current.y] = true;
-
-  }  
-  
-  if(this->traversal->empty()) {   
-    this->traversal = NULL;
-    return *this; 
+  // for(unsigned i = 0; i < newTrav -> newPNG.width(); i++) {
+  //   queue[i] = vector<bool> (trav -> newPNG.height());   
+  // }
+  double area = newPNG.height() * newPNG.width();
+  for (unsigned i = 0;  i < area; i++) {
+    queue.push_back(false);
   }
-
-  Point next = this->traversal->peek();
-
-
-  while(visited(next) || !tolCheck(next) ) 
-  {  
-
-    next = this->traversal->pop(); 
-
-  //empty check 
-    if(this->traversal->empty()) {  
-     this->traversal = NULL;
-     return *this; 
-    }
-
-   next = this->traversal->peek(); 
-
-  }
-  
-  this->point = next;
-  return *this;
-
-} 
-/*returns true if a point has been visited*/ 
-bool ImageTraversal::Iterator::visited(Point point){  
-
-if(matrix[point.x][point.y]){return true;} 
-return false;
-/*
-for(auto it = matrix.begin(); it < matrix.end(); ++it){ 
-
-if(*it == point){return true;} 
-
-}  
-*/
-
-
-}
- 
-bool ImageTraversal::Iterator::bounds(const Point point){ 
-if(point.x < this->traversal->pic.width() && point.y < this->traversal->pic.height()){return true;} 
-else{return false;}
-}
-
-bool ImageTraversal::Iterator::tolCheck(Point next){ 
-
-double tol = calculateDelta(this->traversal->pic.getPixel(this->traversal->startPoint.x, this->traversal->startPoint.y), this->traversal->pic.getPixel(next.x, next.y)); 
-
-if(tol < this->traversal->delta) {return true;} 
- 
-return false;
 }
 
 /**
@@ -140,28 +67,67 @@ return false;
  *
  * Accesses the current Point in the ImageTraversal.
  */
-Point ImageTraversal::Iterator::operator*() {
-  /** @todo [Part 1] */
-  return this->point;
+ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
+  Point origin (0,0);
+
+  if(!trav -> empty()) {
+    temp = trav -> pop();
+    origin.x = temp.x;
+    origin.y = temp.y;
+    int newWidth = origin.y * newPNG.width();
+    queue.at(origin.x + newWidth) = 1;
+
+    //Point originOne (0,0);
+
+    origin.x = temp.x + 1;
+    origin.y = temp.y;
+    testValid(newStart, origin);
+
+    origin.x = temp.x;
+    origin.y = temp.y + 1;
+    testValid(newStart, origin);
+
+    origin.x = temp.x;
+    origin.y = temp.y - 1;
+    testValid(newStart, origin);
+
+    origin.x = temp.x - 1;
+    origin.y = temp.y;
+    testValid(newStart, origin);
+
+    while(!trav -> empty()) {
+      temp = trav -> peek();
+      int total = temp.x * temp.y * newPNG.width();
+      if (queue.at(total)) {
+        trav -> pop();
+      } else {
+        break;
+      }
+      if (trav -> empty()) {
+        temp = newStart;
+        break;
+      }
+      temp = trav -> peek();
+    }
+  }
+  return *this;
 }
 
-/**
- * Iterator inequality operator.
- *
- * Determines if two iterators are not equal.
- */
-bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
-  /** @todo [Part 1] */ 
-     bool thisEmpty = false; 
-     bool otherEmpty = false;
-     if (traversal == NULL) { thisEmpty = true; }
-     if (other.traversal == NULL) { otherEmpty = true; }
-
-    if (!thisEmpty)  { thisEmpty = traversal->empty(); }
-    if (!otherEmpty) { otherEmpty = other.traversal->empty(); }
-
-    if (thisEmpty && otherEmpty) return false; // both empty then the traversals are equal, return true
-    else if ((!thisEmpty)&&(!otherEmpty)) return (traversal != other.traversal); //both not empty then compare the traversals
-    else return true; // one is empty while the other is not, return true
+void ImageTraversal::Iterator::testValid(Point newStart, Point origin) {
+    if (checkValidity(newStart, origin)) {
+      trav -> add(origin);
+    }
 }
 
+bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
+  if (origin.x >= newPNG.width() || origin.y >= newPNG.height()) {
+    return false;
+  }
+  if (newTolerance <= calculateDelta(newPNG.getPixel(newStart.x, newStart.y), newPNG.getPixel(newStart.x, newStart.y))) {
+    return false;
+  } 
+  if (queue.at(origin.x + origin.y * newPNG.width() == 1)) {
+    return false;
+  }
+  return true;
+}

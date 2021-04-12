@@ -1,15 +1,18 @@
+
+
 /**
  * @file ImageTraversal.h
  */
 #pragma once
 
-#include <iterator> 
-#include <vector>
+#include <iterator>
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
+#include <vector>
 
 using namespace cs225;
+
 /**
  * A base class for traversal algorithms on images.
  *
@@ -28,28 +31,36 @@ public:
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
-   // Iterator(); 
-    //~Iterator(); 
     Iterator();
-    Iterator(ImageTraversal *t, Point p);
+    Iterator(ImageTraversal * newTrav, Point p, PNG newPNG, double tol);
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    bool visited(Point point); 
-    ImageTraversal* traversal; 
-    bool tolCheck(Point next); 
-    bool bounds(Point point); 
-    
+    bool checkParameter(Point boys);
+    void testValid(Point newStart, Point origin);
+    bool checkValidity(Point newStart, Point origin);
+    //bool boundaries(Point curr);
+    ImageTraversal * trav;
+    bool checkTolerance(Point next);
+    Point newStart;
+    Point temp;
+    PNG newPNG;
+    double newTolerance;
+    //unsigned int w;
+    //unsigned int h;
+
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
+
   private:
     /** @todo [Part 1] */
-    /** add private members here if neccesary*/ 
-   std::vector<std::vector<bool> > matrix;
-   //ImageTraversal* traversal; 
-   Point point;
-  };
+    /** add private members here if neccesary*/
+    Point curr;
+    std::vector <int> queue;
 
+  };
+  //public:
+    
   /**
    * The begining of an iterator
    * Virtual function. Derived class need to implement this
@@ -82,11 +93,14 @@ public:
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
-protected: 
-  PNG pic; 
-  Point startPoint;  
-  double delta;
-private:
-  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);   
 
+private:
+  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
 };
+
+
+
+
+
+
+
