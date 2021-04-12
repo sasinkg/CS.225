@@ -139,7 +139,13 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other)
 	  return !(thisEmpty && otherEmpty);
 
 }
-
+bool ImageTraversal::Iterator::checkParameter(Point boys) {
+  if(queue[boys.x][boys.y]) {
+    return true;
+  } else {
+    return false;
+  }
+}
 /* bool ImageTraversal::Iterator::checkValid (Point curr, Point p) {
 	if (p.x >= newPNG.width()){
 		return false;
