@@ -18,6 +18,7 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
+  pngNew = new PNG(png);
 }
 
 /**
@@ -29,6 +30,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
+  trav.push_back(&traversal);
+  color.push_back(&colorPicker);
 }
 
 /**
@@ -53,5 +56,35 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
+  //return animation;
+  //PNG pngNewCopy = pngNew;
+  animation.addFrame(*pngNew);
+  int tsize = trav.size();
+  for (int i = 0; i < tsize; i++) {
+    ImageTraversal::Iterator imageTemp = trav[i] -> begin();
+    int c = 0;
+
+    while(imageTemp != trav[i] -> end()) {
+      c++; //haha 
+      Point pNew = *imageTemp;
+      HSLAPixel & goonClass = pngNew -> getPixel(pNew.x, pNew.y);
+      HSLAPixel temp = color[i] -> getColor(pNew.x, pNew.y);
+      goonClass.h = temp.h;
+      goonClass.s = temp.s;
+      goonClass.l = temp.l;
+      goonClass.a = temp.a;
+
+      if(c % frameInterval == 0) {
+        animation.addFrame(*pngNew);
+      }
+      ++imageTemp;
+    }
+    animation.addFrame(*pngNew);
+  }
   return animation;
+}
+
+FloodFilledImage::~FloodFilledImage() {
+  delete pngNew;
+ // delete pngNew;
 }

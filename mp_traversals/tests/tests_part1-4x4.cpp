@@ -88,7 +88,7 @@ TEST_CASE("DFS visits all points within a tolerance", "[weight=1][part=1]") {
     count++;
   }
   REQUIRE( count == 4 );
-}
+} 
 
 TEST_CASE("BFS visits all points within a tolerance", "[weight=1][part=1]") {
   PNG png = getTestPNG();
@@ -100,7 +100,7 @@ TEST_CASE("BFS visits all points within a tolerance", "[weight=1][part=1]") {
     count++;
   }
   REQUIRE( count == 4 );
-}
+} 
 
 
 TEST_CASE("DFS visits all points within a tolerance (includes pixels on image edge)", "[weight=1][part=1]") {
@@ -145,7 +145,7 @@ TEST_CASE("DFS iterator visits all points in the correct order", "[weight=1][par
   REQUIRE( *it == Point(3, 0) ); ++it;
   REQUIRE( *it == Point(2, 0) ); ++it;
   REQUIRE( *it == Point(1, 0) ); ++it;  
-}
+} 
 
 TEST_CASE("BFS iterator visits all points in the correct order", "[weight=1][part=1]") {
   PNG png = getTestPNG();
