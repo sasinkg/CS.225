@@ -31,7 +31,7 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
-  bool boundaries(const Point & point);
+  //bool boundaries(const Point & point);
 
 
 private:

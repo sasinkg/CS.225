@@ -84,11 +84,11 @@ bool BFS::empty() const {
   /** @todo [Part 1] */
   return queue.empty();
 }
-bool BFS::boundaries(const Point & point){ 
+/* bool BFS::boundaries(const Point & point){ 
   if(point.x < newPNG.width() && point.y < newPNG.height()) {
     return true;
   } 
   else {
     return false;
   }
-}
+} */

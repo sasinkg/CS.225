@@ -47,7 +47,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne
   /** @todo [Part 1] */
   //return *this;
   trav = newTrav;
-  newStart = p;
+  sp = p;
   newPNG = pngOne;
   newTolerance = tol;
 
@@ -81,19 +81,19 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
 
     origin.x = temp.x + 1;
     origin.y = temp.y;
-    testValid(newStart, origin);
+    testValid(sp, origin);
 
     origin.x = temp.x;
     origin.y = temp.y + 1;
-    testValid(newStart, origin);
+    testValid(sp, origin);
 
     origin.x = temp.x - 1;
     origin.y = temp.y;
-    testValid(newStart, origin);
+    testValid(sp, origin);
 
     origin.x = temp.x;
     origin.y = temp.y - 1;
-    testValid(newStart, origin);
+    testValid(sp, origin);
 
     while(!trav -> empty()) {
       temp = trav -> peek();
@@ -104,7 +104,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
         break;
       }
       if (trav -> empty()) {
-        temp = newStart;
+        temp = sp;
         break;
       }
       temp = trav -> peek();
@@ -132,17 +132,17 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other
   }
   return !(thisEmpty && otherEmpty);
 }
-void ImageTraversal::Iterator::testValid(Point newStart, Point origin) {
-    if (checkValidity(newStart, origin)) {
+void ImageTraversal::Iterator::testValid(Point sp, Point origin) {
+    if (checkValidity(sp, origin)) {
       trav -> add(origin);
     }
 }
 
-bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
+bool ImageTraversal::Iterator::checkValidity(Point sp, Point origin) {
   if (origin.x >= newPNG.width() && origin.y >= newPNG.height()) {
     return false;
   }
-  if (newTolerance <= calculateDelta(newPNG.getPixel(newStart.x, newStart.y), newPNG.getPixel(origin.x, origin.y))) {
+  if (newTolerance <= calculateDelta(newPNG.getPixel(sp.x, sp.y), newPNG.getPixel(origin.x, origin.y))) {
     return false;
   } 
   if (queue.at(origin.x + origin.y * newPNG.width()) == 1) {

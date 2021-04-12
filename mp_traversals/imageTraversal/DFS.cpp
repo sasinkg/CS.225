@@ -26,8 +26,8 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
   /** @todo [Part 1] */ 
   newPNG = png; 
   newStart = start;  
-  stack.push(newStart); 
   newTolerance = tolerance;
+  stack.push(newStart); 
 }
 
 /**
@@ -53,39 +53,24 @@ void DFS::add(const Point & point) {
   /** @todo [Part 1] */  
 
 stack.push(point);
-/*
- Point right(point.x+1,point.y); 
- if(bounds(right)){stack.push(right);}    
-
- Point down(point.x,point.y+1); 
- if(bounds(down)){stack.push(down);} 
- 
-
- Point up(point.x-1,point.y); 
- if(bounds(up)){stack.push(up);} 
- 
-
- Point left(point.x,point.y-1); 
- if(bounds(left)){stack.push(left);}  
-*/
 
 }
-bool DFS::boundaries(const Point & point){ 
+/* ool DFS::boundaries(const Point & point){ 
   if(point.x < newPNG.width() && point.y < newPNG.height()) {
     return true;
   } 
   else {
     return false;
   }
-}
+}*/ 
 /**
  * Removes and returns the current Point in the traversal.
  */
 Point DFS::pop() {
   /** @todo [Part 1] */ 
-  Point temp1 = stack.top(); 
+  Point temp = stack.top(); 
   stack.pop();
-  return temp1;
+  return temp;
 }
 
 /**

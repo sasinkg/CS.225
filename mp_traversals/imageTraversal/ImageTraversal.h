@@ -42,7 +42,7 @@ public:
     //bool boundaries(Point curr);
     ImageTraversal * trav;
     bool checkTolerance(Point next);
-    Point newStart;
+    Point sp;
     Point temp;
     PNG newPNG;
     double newTolerance;
