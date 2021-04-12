@@ -145,7 +145,7 @@ bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
   if (newTolerance <= calculateDelta(newPNG.getPixel(newStart.x, newStart.y), newPNG.getPixel(origin.x, origin.y))) {
     return false;
   } 
-  if (queue.at(origin.x + origin.y * newPNG.width() == 1)) {
+  if (queue.at(origin.x + origin.y * newPNG.width()) == 1) {
     return false;
   }
   return true;
