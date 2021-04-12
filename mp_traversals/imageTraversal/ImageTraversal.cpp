@@ -70,7 +70,6 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   Point origin (0,0);
-
   if(!trav -> empty()) {
     temp = trav -> pop();
     origin.x = temp.x;
@@ -116,11 +115,6 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
 Point ImageTraversal::Iterator::operator*() {
   return curr;
 }
-void ImageTraversal::Iterator::testValid(Point newStart, Point origin) {
-    if (checkValidity(newStart, origin)) {
-      trav -> add(origin);
-    }
-}
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other) {
   bool thisEmpty = false;
   bool otherEmpty = false;
@@ -138,8 +132,14 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other
   }
   return !(thisEmpty && otherEmpty);
 }
+void ImageTraversal::Iterator::testValid(Point newStart, Point origin) {
+    if (checkValidity(newStart, origin)) {
+      trav -> add(origin);
+    }
+}
+
 bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
-  if (origin.x >= newPNG.width() || origin.y >= newPNG.height()) {
+  if (origin.x >= newPNG.width() && origin.y >= newPNG.height()) {
     return false;
   }
   if (newTolerance <= calculateDelta(newPNG.getPixel(newStart.x, newStart.y), newPNG.getPixel(origin.x, origin.y))) {
