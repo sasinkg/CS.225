@@ -95,7 +95,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   } 
   Point next = this -> trav -> peek();
 
-  while(queue[next.x][next.y] == true || !checkTolerance(next) ) {
+  while(queue[next.x][next.y] == true || calculateDelta(this -> trav -> newPNG.getPixel(this -> trav -> newStart.x, this -> trav -> newStart.y), this -> trav -> newPNG.getPixel(next.x, next.y))) {
     next = this -> trav -> pop();
     if ( this -> trav -> empty()) {
       this -> trav = NULL;
