@@ -61,7 +61,9 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne
     queue.push_back(false);
   }
 }
-
+Point ImageTraversal::Iterator::operator*() {
+  return curr;
+}
 /**
  * Iterator accessor opreator.
  *
@@ -130,4 +132,22 @@ bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
     return false;
   }
   return true;
+}
+
+bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other) {
+  bool thisEmpty = false;
+  bool otherEmpty = false;
+
+  if (trav == NULL) {
+    thisEmpty = true;
+  } else {
+    thisEmpty = trav -> empty();
+  }
+
+  if(other.trav == NULL) {
+    otherEmpty = true;
+  } else {
+    otherEmpty = other.trav -> empty();
+  }
+  return !(thisEmpty && otherEmpty);
 }
