@@ -61,9 +61,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne
     queue.push_back(false);
   }
 }
-Point ImageTraversal::Iterator::operator*() {
-  return curr;
-}
+
 /**
  * Iterator accessor opreator.
  *
@@ -89,17 +87,17 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
     origin.y = temp.y + 1;
     testValid(newStart, origin);
 
-    origin.x = temp.x;
-    origin.y = temp.y - 1;
-    testValid(newStart, origin);
-
     origin.x = temp.x - 1;
     origin.y = temp.y;
     testValid(newStart, origin);
 
+    origin.x = temp.x;
+    origin.y = temp.y - 1;
+    testValid(newStart, origin);
+
     while(!trav -> empty()) {
       temp = trav -> peek();
-      int total = temp.x * temp.y * newPNG.width();
+      int total = temp.x + temp.y * newPNG.width();
       if (queue.at(total)) {
         trav -> pop();
       } else {
@@ -114,26 +112,14 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   }
   return *this;
 }
-
+Point ImageTraversal::Iterator::operator*() {
+  return curr;
+}
 void ImageTraversal::Iterator::testValid(Point newStart, Point origin) {
     if (checkValidity(newStart, origin)) {
       trav -> add(origin);
     }
 }
-
-bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
-  if (origin.x >= newPNG.width() || origin.y >= newPNG.height()) {
-    return false;
-  }
-  if (newTolerance <= calculateDelta(newPNG.getPixel(newStart.x, newStart.y), newPNG.getPixel(newStart.x, newStart.y))) {
-    return false;
-  } 
-  if (queue.at(origin.x + origin.y * newPNG.width() == 1)) {
-    return false;
-  }
-  return true;
-}
-
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other) {
   bool thisEmpty = false;
   bool otherEmpty = false;
@@ -151,3 +137,16 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other
   }
   return !(thisEmpty && otherEmpty);
 }
+bool ImageTraversal::Iterator::checkValidity(Point newStart, Point origin) {
+  if (origin.x >= newPNG.width() || origin.y >= newPNG.height()) {
+    return false;
+  }
+  if (newTolerance <= calculateDelta(newPNG.getPixel(newStart.x, newStart.y), newPNG.getPixel(origin.x, origin.y))) {
+    return false;
+  } 
+  if (queue.at(origin.x + origin.y * newPNG.width() == 1)) {
+    return false;
+  }
+  return true;
+}
+
