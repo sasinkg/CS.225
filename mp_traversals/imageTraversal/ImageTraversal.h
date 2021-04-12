@@ -3,14 +3,13 @@
  */
 #pragma once
 
-#include <iterator>
+#include <iterator> 
+#include <vector>
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
-#include <vector>
 
 using namespace cs225;
-
 /**
  * A base class for traversal algorithms on images.
  *
@@ -29,31 +28,28 @@ public:
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
+   // Iterator(); 
+    //~Iterator(); 
     Iterator();
-    Iterator(ImageTraversal * newTrav, Point p);
+    Iterator(ImageTraversal *t, Point p);
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    bool checkParameter(Point boys);
-    //bool boundaries(Point curr);
-    ImageTraversal * trav;
-    bool checkTolerance(Point next);
-
-
+    bool visited(Point point); 
+    ImageTraversal* traversal; 
+    bool tolCheck(Point next); 
+    bool bounds(Point point); 
+    
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
-
   private:
     /** @todo [Part 1] */
-    /** add private members here if neccesary*/
-    Point curr;
-    std::vector<std::vector<bool>> queue; 
-
+    /** add private members here if neccesary*/ 
+   std::vector<std::vector<bool> > matrix;
+   //ImageTraversal* traversal; 
+   Point point;
   };
-  protected:
-    Point newStart;
-    PNG newPNG;
-    double newTolerance;
+
   /**
    * The begining of an iterator
    * Virtual function. Derived class need to implement this
@@ -86,7 +82,11 @@ public:
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
-
+protected: 
+  PNG pic; 
+  Point startPoint;  
+  double delta;
 private:
-  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
+  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);   
+
 };

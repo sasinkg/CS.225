@@ -23,20 +23,21 @@ using namespace cs225;
  * it will not be included in this BFS
  */
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
-  /** @todo [Part 1] */
-
-  newPNG = png;
-  newStart = start;
-  newTolerance = tolerance;
-  queue.push(start);
+  /** @todo [Part 1] */ 
+  pic = png; 
+  startPoint = start;  
+  queue.push(startPoint); 
+  delta = tolerance;
 }
 
 /**
  * Returns an iterator for the traversal starting at the first point.
  */
 ImageTraversal::Iterator BFS::begin() {
-  /** @todo [Part 1] */
-  return ImageTraversal::Iterator(this, newStart);
+  /** @todo [Part 1] */ 
+    //this might be an error 
+  
+  return ImageTraversal::Iterator(this, startPoint);
 }
 
 /**
@@ -50,29 +51,41 @@ ImageTraversal::Iterator BFS::end() {
 /**
  * Adds a Point for the traversal to visit at some point in the future.
  */
-void BFS::add(const Point & point) {
-  /** @todo [Part 1] */
-  queue.push(point);
+void BFS::add(const Point & point) { 
+  /** @todo [Part 1] */   
+
+queue.push(point);
+
+/*
+ Point right(point.x+1,point.y); 
+ if(bounds(right)){queue.push(right);}    
+
+ Point down(point.x,point.y+1); 
+ if(bounds(down)){queue.push(down);} 
+ 
+
+ Point up(point.x-1,point.y); 
+ if(bounds(up)){queue.push(up);} 
+ 
+
+ Point left(point.x,point.y-1); 
+ if(bounds(left)){queue.push(left);} 
+*/ 
+
+}
+bool BFS::bounds(const Point & point){ 
+if(point.x < pic.width() && point.y < pic.height()){return true;} 
+else{return false;}
 }
 
 /**
  * Removes and returns the current Point in the traversal.
  */
 Point BFS::pop() {
-  /** @todo [Part 1] */
-  //return Point(0, 0);
-  Point temp1 = queue.front();
+  /** @todo [Part 1] */ 
+  Point temp = queue.front(); 
   queue.pop();
-  return temp1; 
- 
-}
-
-bool BFS::boundaries(const Point & point) {
-   if (newStart.x < newPNG.width() && newStart.y < newPNG.height()) {
-    return true;
-  } else {
-    return false; 
-  }
+  return temp;
 }
 
 /**

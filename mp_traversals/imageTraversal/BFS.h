@@ -31,14 +31,9 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
-  bool boundaries(const Point & point);
-  PNG newPNG;
-  Point newStart;
-  double newTolerance;
+  bool bounds(const Point & point);
 private:
   /** @todo [Part 1] */
-  /** add private members here*/
-  std::queue<Point> queue;
-
-  
+  /** add private members here*/ 
+  std::queue<Point> queue; 
 };

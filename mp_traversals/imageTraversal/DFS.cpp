@@ -23,12 +23,11 @@
  * it will not be included in this DFS
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
-  /** @todo [Part 1] */
-
-  newPNG = png;
-  newStart = start;
-  newTolerance = tolerance;
-  stack.push(start);
+  /** @todo [Part 1] */ 
+  pic = png; 
+  startPoint = start;  
+  stack.push(startPoint); 
+  delta = tolerance;
 }
 
 /**
@@ -36,16 +35,9 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator(this, newStart);
+  return ImageTraversal::Iterator(this, startPoint);
 }
 
-bool DFS::boundaries(const Point & point) {
-   if (newStart.x < newPNG.width() && newStart.y < newPNG.height()) {
-    return true;
-  } else {
-    return false; 
-  }
-}
 /**
  * Returns an iterator for the traversal one past the end of the traversal.
  */
@@ -57,19 +49,37 @@ ImageTraversal::Iterator DFS::end() {
 /**
  * Adds a Point for the traversal to visit at some point in the future.
  */
-void DFS::add(const Point & point) {
-  /** @todo [Part 1] */
-  stack.push(point);
-}
+void DFS::add(const Point & point) { 
+  /** @todo [Part 1] */  
 
+stack.push(point);
+/*
+ Point right(point.x+1,point.y); 
+ if(bounds(right)){stack.push(right);}    
+
+ Point down(point.x,point.y+1); 
+ if(bounds(down)){stack.push(down);} 
+ 
+
+ Point up(point.x-1,point.y); 
+ if(bounds(up)){stack.push(up);} 
+ 
+
+ Point left(point.x,point.y-1); 
+ if(bounds(left)){stack.push(left);}  
+*/
+
+}
+bool DFS::bounds(const Point & point){ 
+if(point.x < pic.width() && point.y < pic.height()){return true;} 
+else{return false;}
+}
 /**
  * Removes and returns the current Point in the traversal.
  */
 Point DFS::pop() {
-  /** @todo [Part 1] */
-  //return Point(0, 0);
-
-  Point ret = stack.top();
+  /** @todo [Part 1] */ 
+  Point ret = stack.top(); 
   stack.pop();
   return ret;
 }
@@ -80,13 +90,12 @@ Point DFS::pop() {
 Point DFS::peek() const {
   /** @todo [Part 1] */
   return stack.top();
-  //return Point(0, 0);
 }
 
 /**
  * Returns true if the traversal is empty.
  */
 bool DFS::empty() const {
-  /** @todo [Part 1] */
-  return stack.empty();
+  /** @todo [Part 1] */ 
+return stack.empty();
 }
