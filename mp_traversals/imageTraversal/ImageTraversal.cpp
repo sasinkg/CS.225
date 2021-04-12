@@ -65,7 +65,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p){
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   Point newCurr = this -> trav -> pop();
 
-  if(queue[newCurr.x][newCurr.y] == true) {
+  if(queue[newCurr.x][newCurr.y]) {
     Point right(curr.x + 1, curr.y);
     if (right.x < (this -> trav -> newPNG.width()) && right.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(right);

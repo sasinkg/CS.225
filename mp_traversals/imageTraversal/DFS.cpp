@@ -62,9 +62,9 @@ Point DFS::pop() {
   /** @todo [Part 1] */
   //return Point(0, 0);
 
-  Point curr = stack.top();
+  Point ret = stack.top();
   stack.pop();
-  return curr;
+  return ret;
 }
 
 /**
