@@ -31,7 +31,8 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
-PNG newPNG;
+  bool boundaries(const Point & point);
+  PNG newPNG;
   Point newStart;
   double newTolerance;
 private:

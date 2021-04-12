@@ -39,6 +39,13 @@ ImageTraversal::Iterator DFS::begin() {
   return ImageTraversal::Iterator(this, newStart);
 }
 
+bool DFS::boundaries(const Point & point) {
+   if (newStart.x < newPNG.width() && newStart.y < newPNG.height()) {
+    return true;
+  } else {
+    return false; 
+  }
+}
 /**
  * Returns an iterator for the traversal one past the end of the traversal.
  */

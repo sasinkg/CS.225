@@ -63,7 +63,16 @@ Point BFS::pop() {
   //return Point(0, 0);
   Point temp1 = queue.front();
   queue.pop();
-  return temp1;
+  return temp1; 
+ 
+}
+
+bool BFS::boundaries(const Point & point) {
+   if (newStart.x < newPNG.width() && newStart.y < newPNG.height()) {
+    return true;
+  } else {
+    return false; 
+  }
 }
 
 /**

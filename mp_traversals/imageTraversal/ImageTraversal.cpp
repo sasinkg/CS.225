@@ -65,26 +65,27 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p){
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   Point newCurr = this -> trav -> pop();
 
-  if(queue[newCurr.x][newCurr.y]) {
+  if(!checkParameter(newCurr)) {
     Point right(curr.x + 1, curr.y);
     if (right.x < (this -> trav -> newPNG.width()) && right.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(right);
     }
     
-    Point left(curr.x, curr.y - 1);
-    if (left.x < (this -> trav -> newPNG.width()) && left.y < this -> trav -> newPNG.height()) {
-      this -> trav -> add(left);
-    }
+    Point down(curr.x, curr.y + 1);
+    if (down.x < (this -> trav -> newPNG.width()) && down.y < this -> trav -> newPNG.height()) {
+      this -> trav -> add(down);
+    } 
 
     Point up(curr.x - 1, curr.y);
     if (up.x < (this -> trav -> newPNG.width()) && up.y < this -> trav -> newPNG.height()) {
       this -> trav -> add(up);
     }
 
-    Point down(curr.x, curr.y + 1);
-    if (down.x < (this -> trav -> newPNG.width()) && down.y < this -> trav -> newPNG.height()) {
-      this -> trav -> add(down);
-    } 
+    
+    Point left(curr.x, curr.y - 1);
+    if (left.x < (this -> trav -> newPNG.width()) && left.y < this -> trav -> newPNG.height()) {
+      this -> trav -> add(left);
+    }
 
     queue[newCurr.x][newCurr.y] = true;   
   }
@@ -95,7 +96,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   } 
   Point next = this -> trav -> peek();
 
-  while(queue[next.x][next.y] == true || calculateDelta(this -> trav -> newPNG.getPixel(this -> trav -> newStart.x, this -> trav -> newStart.y), this -> trav -> newPNG.getPixel(next.x, next.y))) {
+  while(checkParameter(next) || !checkTolerance(next)) {
     next = this -> trav -> pop();
     if ( this -> trav -> empty()) {
       this -> trav = NULL;
@@ -114,9 +115,24 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return curr;
+  return this -> curr;
 }
 
+bool ImageTraversal::Iterator::checkTolerance(Point next) {
+  double a = calculateDelta(this -> trav -> newPNG.getPixel(this -> trav -> newStart.x, this -> trav -> newStart.y), this -> trav -> newPNG.getPixel(next.x, next.y));
+  if (a > this -> trav -> newTolerance) {
+    return false;
+  } else {
+    return true;
+  }
+}
+bool ImageTraversal::Iterator::checkParameter(Point boys) {
+  if(queue[boys.x][boys.y]) {
+    return true;
+  } else {
+    return false;
+  }
+}
 /**
  * Iterator inequality operator.
  *
@@ -138,13 +154,6 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other)
 	  }
 	  return !(thisEmpty && otherEmpty);
 
-}
-bool ImageTraversal::Iterator::checkParameter(Point boys) {
-  if(queue[boys.x][boys.y]) {
-    return true;
-  } else {
-    return false;
-  }
 }
 /* bool ImageTraversal::Iterator::checkValid (Point curr, Point p) {
 	if (p.x >= newPNG.width()){

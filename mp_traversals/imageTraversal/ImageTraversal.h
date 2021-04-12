@@ -34,7 +34,7 @@ public:
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    //bool checkValid(Point curr);
+    bool checkParameter(Point boys);
     //bool boundaries(Point curr);
     ImageTraversal * trav;
     bool checkTolerance(Point next);
