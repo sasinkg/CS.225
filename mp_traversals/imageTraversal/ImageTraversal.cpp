@@ -47,7 +47,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne
   /** @todo [Part 1] */
   //return *this;
   trav = newTrav;
-  curr = p;
+  newStart = p;
   newPNG = pngOne;
   newTolerance = tol;
 
