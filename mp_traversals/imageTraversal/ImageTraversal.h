@@ -30,11 +30,14 @@ public:
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
-    Iterator(ImageTraversal * itrav, Point spo, PNG pg, double tol);
+    Iterator(ImageTraversal * newTrav, Point p);
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    bool checkValid(Point sp, Point p);
+    bool checkValid(Point curr);
+    bool boundaries(Point curr);
+    ImageTraversal * trav;
+    bool checkTolerance(Point next);
 
 
     /** @todo [Part 1] */
@@ -43,15 +46,14 @@ public:
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
-    ImageTraversal * IT;
-    Point sp;
     Point curr;
-    PNG pngg;
-    double toleranceg;
-    std::vector <int> visit; 
+    std::vector<std::vector<bool>> queue; 
 
   };
-
+  protected:
+    Point temp;
+    PNG newPNG;
+    double newTolerance;
   /**
    * The begining of an iterator
    * Virtual function. Derived class need to implement this
