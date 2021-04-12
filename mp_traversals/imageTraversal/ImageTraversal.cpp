@@ -81,19 +81,26 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
 
     origin.x = temp.x + 1;
     origin.y = temp.y;
-    testValid(sp, origin);
+    //testValid(sp, origin);
+    if(checkValidity(sp, origin)) { trav -> add(origin)}
 
     origin.x = temp.x;
     origin.y = temp.y + 1;
-    testValid(sp, origin);
+//    testValid(sp, origin);
+    if(checkValidity(sp, origin)) { trav -> add(origin)}
+
 
     origin.x = temp.x - 1;
     origin.y = temp.y;
-    testValid(sp, origin);
+  //  testValid(sp, origin);
+      if(checkValidity(sp, origin)) { trav -> add(origin)}
+
 
     origin.x = temp.x;
     origin.y = temp.y - 1;
-    testValid(sp, origin);
+   // testValid(sp, origin);
+       if(checkValidity(sp, origin)) { trav -> add(origin)}
+
 
     while(!trav -> empty()) {
       temp = trav -> peek();
