@@ -56,6 +56,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne
   // for(unsigned i = 0; i < newTrav -> newPNG.width(); i++) {
   //   queue[i] = vector<bool> (trav -> newPNG.height());   
   // }
+  temp = trav -> peek();
   double area = newPNG.height() * newPNG.width();
   for (unsigned i = 0;  i < area; i++) {
     queue.push_back(false);
