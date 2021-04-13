@@ -7,8 +7,10 @@
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
+#include <vector>
 
 using namespace cs225;
+using namespace std;
 
 /**
  * A base class for traversal algorithms on images.
@@ -48,7 +50,8 @@ public:
     Point start1;
     Point curr;
     Point cp;
-    std::vector <int> pass;
+    Point curr2;
+    std::vector<std::vector<bool>>pass;
   };
 
   /**
