@@ -34,8 +34,8 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
   trav = NULL;
-  Point sp (0,0);
-  cp = sp;
+ // Point sp (0,0);
+  // cp = sp;
 }
 
 
@@ -56,7 +56,8 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * trav2, PNG png2, Point start
     tolerance1 = tolerance2;
     double area = png1.width() * png1.height();
     for (unsigned i = 0; i < area; i++) {
-        pass[png1.width()][png1.height()] = (false);
+        //pass[png1.width()][png1.height()] = (false);
+        pass.push_back(false);
     }
 
    
@@ -67,41 +68,54 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * trav2, PNG png2, Point start
  * Advances the traversal of the image.
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  /** @todo [Part 1] */
-    //psuedo
-    Point right = Point(cp.x + 1, cp.y);
-    Point down = Point(cp.x, cp.y + 1);
-    Point left = Point(cp.x - 1, cp.y);
-    Point up = Point(cp.x, cp.y - 1);
+Point s(0,0);
+if(trav -> empty() == false) {
+    curr = trav -> pop();
+    s.x = curr.x;
+    s.y = curr.y;
 
-    if (Visitation(right)) {
-        trav -> add(right);
+    pass.at(s.x + s.y * png1.width()) = 1; 
+    
+    s.x = curr.x + 1;
+    s.y = curr.y;
+    if (Validity(p, s)) {
+        trav -> add(s);
+    } 
+    if (Validity(p,s)) {
+        trav -> add(s);
     }
-    if (Visitation(down)) {
-        trav -> add(down);
+    if (Validity(p,s)) {
+        trav -> add(s);
     }
-    if (Visitation(left)) {
-        trav -> add(left);
+    if (Validity(p,s)) {
+        trav -> add(s);
     }
-    if (Visitation(up)) {
-        trav -> add(up);
-    }
-
-    while (trav -> empty() == false) {
-        curr2 = trav -> peek();
-        if(Visitation(curr2) == false) {
+}
+  while (trav -> empty() == false) {
+      curr = trav -> peek();
+      if (pass.at(curr.x + curr.y * png1.width())) {
           trav -> pop();
-          if (trav -> empty()) {
-            return *this;
-           }
-        } else {
+      } else {
           break;
-        }
-        curr2 = trav -> peek();
-    }
-  //r//eturn *this;
-  cp = curr2;
+      } 
+      if (trav -> empty()) {
+          curr = p;
+          break;
+      }
+    curr = trav -> peek();
+  }
   return *this;
+}
+bool ImageTraversal::Iterator::Validity(Point p, Point s) {
+    if(s.x >= png1.width() || s.y >= png1.height()) {
+        return false;
+    }
+    if (tolerance1 <= calculateDelta(png1.getPixel(p.x, p.y), png1.getPixel(s.x,s.y))) {
+        return false;
+    } 
+    if (pass.at(s.x + s.y * png1.width()) == 1) {
+        return false;
+    }
 }
 
 /**
@@ -135,7 +149,7 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other)
     return !(thisEmpty && otherEmpty);
 }
 
-bool ImageTraversal::Iterator::Visitation(Point currPoint) {
+/* bool ImageTraversal::Iterator::Visitation(Point currPoint) {
     if (currPoint.x < png1.width()) {
         if (currPoint.y < png1.height()) {
             if (calculateDelta(png1.getPixel(start1.x, start1.y), png1.getPixel(currPoint.x, currPoint.y)) < tolerance1) {
@@ -146,4 +160,4 @@ bool ImageTraversal::Iterator::Visitation(Point currPoint) {
         }
     }
     return false;
-}
+} */

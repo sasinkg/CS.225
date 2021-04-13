@@ -36,7 +36,7 @@ public:
     Point operator*();
     bool operator!=(const Iterator &other);
 
-    bool Visitation(Point curr);
+    bool Validity(Point sp, Point p);
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
@@ -44,14 +44,17 @@ public:
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
-    PNG png1;
     ImageTraversal * trav;
     double tolerance1;
     Point start1;
     Point curr;
     Point cp;
+        PNG png1;
+
+    Point p;
+    Point s;
     Point curr2;
-    std::vector<std::vector<bool>>pass;
+    std::vector <int> pass;
   };
 
   /**
