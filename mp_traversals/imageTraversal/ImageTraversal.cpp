@@ -33,8 +33,34 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
+  trav = NULL;
+  Point sp (0,0);
+  curr = sp;
 }
 
+
+ImageTraversal::Iterator::Iterator(ImageTraversal * trav2, PNG png2, Point start2, double tolerance2) {
+  /** @todo [Part 1] */
+ // traversal = NULL;
+    /* Point points (0,0);
+    if (trav -> empty() == false) {
+        curr = trav -> pop();
+        points.x = curr.x;
+        points.y = curr.y;
+
+    }*/ 
+
+    trav = trav2;
+    start1 = start2;
+    png1 = png2;
+    tolerance1 = tolerance2;
+    double area = png1.width() * png1.height();
+    for (unsigned i = 0; i < area; i++) {
+        pass.push_back(false);
+    }
+
+   
+}
 /**
  * Iterator increment opreator.
  *
@@ -42,6 +68,37 @@ ImageTraversal::Iterator::Iterator() {
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
+    //psuedo
+    Point right = Point(cp.x + 1, cp.y);
+    Point down = Point(cp.x, cp.y + 1);
+    Point left = Point(cp.x - 1, cp.y);
+    Point up = Point(cp.x, cp.y - 1);
+
+    if (Visitation(right)) {
+        trav -> add(right);
+    }
+    if (Visitation(down)) {
+        trav -> add(down);
+    }
+    if (Visitation(left)) {
+        trav -> add(left);
+    }
+    if (Visitation(up)) {
+        trav -> add(up);
+    }
+
+    while (trav -> empty() == false) {
+        cp = trav -> peek();
+        if (pass.at(cp.x +cp.y * png1.width())) {
+            trav -> pop();
+        } else {
+            break;
+        } if (trav -> empty() == true) {
+            cp = start1;
+            break;
+        }
+        cp = trav -> peek();
+    }
   return *this;
 }
 
@@ -52,7 +109,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  return cp;
 }
 
 /**
@@ -62,5 +119,29 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return false;
+  //return false;
+    bool thisEmpty, otherEmpty;
+    if(trav == NULL) {
+        thisEmpty = true;
+    } else {
+        thisEmpty = trav -> empty();
+    } 
+
+    if (other.trav == NULL) {
+        otherEmpty = true;
+    } else { otherEmpty = other.trav -> empty();}
+    return !(thisEmpty && otherEmpty);
+}
+
+bool ImageTraversal::Iterator::Visitation(Point currPoint) {
+    if (curr.x < png1.width()) {
+        if (curr.y < png1.height()) {
+            if (calculateDelta(png1.getPixel(start1.x, start1.y), png1.getPixel(currPoint.x, currPoint.y)) < tolerance1) {
+                if (pass[currPoint.x][currPoint.y] == false) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
