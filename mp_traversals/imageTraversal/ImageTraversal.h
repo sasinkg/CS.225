@@ -1,5 +1,3 @@
-
-
 /**
  * @file ImageTraversal.h
  */
@@ -10,9 +8,7 @@
 #include "../cs225/PNG.h"
 #include "../Point.h"
 #include <vector>
-
-using namespace cs225;
-using namespace std;
+using namespace cs225; using namespace std;
 
 /**
  * A base class for traversal algorithms on images.
@@ -27,24 +23,37 @@ using namespace std;
  */
 class ImageTraversal {
 public:
+  /**
+   * A forward iterator through an ImageTraversal.
+   */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
+    Iterator (ImageTraversal * itrav, Point spo, PNG pg, double tol);
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    Iterator(ImageTraversal * goBears, Point pointTwo, PNG pngg, double tol);
-
-    bool checkValidity(Point nextPoint, Point points);
+    bool checkValid (Point sp, Point p);
+    /** @todo [Part 1] */
+    /** add member functions if neccesary*/
 
   private:
-    ImageTraversal * goCubs;
-    Point nextPoint;
+    /** @todo [Part 1] */
+    /** add private members here if neccesary*/
+    ImageTraversal * IT;
+    Point sp; 
     Point curr;
-    PNG pngOne;
-    double toleranceOne;
-    std::vector<int> pass;
-  }; 
+    PNG pngg;
+	double toleranceg;
+    std::vector <int> visit; 
+
+
+  };
+
+  /**
+   * The begining of an iterator
+   * Virtual function. Derived class need to implement this
+   */
   virtual Iterator begin() = 0;
 
   /**
@@ -77,10 +86,3 @@ public:
 private:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
 };
-
-
-
-
-
-
-

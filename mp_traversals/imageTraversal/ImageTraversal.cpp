@@ -1,13 +1,21 @@
 #include <cmath>
 #include <iterator>
 #include <iostream>
+
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
-#include "ImageTraversal.h"
 
+#include "ImageTraversal.h" 
 using namespace std;
-
+/**
+ * Calculates a metric for the difference between two pixels, used to
+ * calculate if a pixel is within a tolerance.
+ *
+ * @param p1 First pixel
+ * @param p2 Second pixel
+ * @return the difference between two HSLAPixels
+ */
 double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2) {
   double h = fabs(p1.h - p2.h);
   double s = p1.s - p2.s;
@@ -20,98 +28,122 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
   return sqrt( (h*h) + (s*s) + (l*l) );
 }
 
+/**
+ * Default iterator constructor.
+ */
+ImageTraversal::Iterator::Iterator() {
+  /** @todo [Part 1] */
+  IT = NULL;
+}
 
-ImageTraversal::Iterator::Iterator() { goCubs = NULL;}
-
-ImageTraversal::Iterator::Iterator(ImageTraversal * goBears, Point pointTwo, PNG pngg, double tol){
-  goCubs = goBears;
-  nextPoint = pointTwo;
-  pngOne = pngg;
-  toleranceOne = tol;
-  curr = goCubs -> peek();
-
-  for (unsigned i = 0; i < pngOne.height() * pngOne.width(); i++) {
-    pass.push_back(false);
+ImageTraversal::Iterator::Iterator(ImageTraversal * itrav, Point spo, PNG png1, double tol) {
+  /** @todo [Part 1] */
+  IT = itrav;
+  sp = spo;
+  pngg = png1;
+  toleranceg = tol;
+  curr = IT->peek();
+  for (unsigned i = 0; i < pngg.height() * pngg.width(); i++){
+		visit.push_back(false);
   }
 }
+
+/**
+ * Iterator increment opreator.
+ *
+ * Advances the traversal of the image.
+ */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  Point points (0,0);
-  if (!goCubs -> empty()) {
-    curr = goCubs -> pop();
-    points.x = curr.x;
-    points.y = curr.y;
-    pass.at(points.x + points.y * pngOne.width()) = 1;
+  /** @todo [Part 1] */
+  Point p (0, 0);
+  if (!IT -> empty()){
+	curr = IT -> pop();
+	p.x = curr.x;
+	p.y = curr.y;
+	visit.at(p.x + p.y*pngg.width()) = 1;
 
-    points.x = curr.x + 1;
-    points.y = curr.y;
-    if (checkValidity(nextPoint, points)) {
-      goCubs -> add(points);
-    }
-     points.x = curr.x;
-    points.y = curr.y + 1;
-    if (checkValidity(nextPoint,points)) {
-      goCubs -> add(points);
-    }
-     points.x = curr.x - 1;
-    points.y = curr.y;
-    if (checkValidity(nextPoint,points)) {
-      goCubs -> add(points);
-    }
-    points.x = curr.x;
-    points.y = curr.y - 1;
-    if (checkValidity(nextPoint,points)) {
-      goCubs -> add(points);
-    }
-    while(!goCubs -> empty()) {
-      curr = goCubs -> peek();
-      if(pass.at(curr.x + curr.y * pngOne.width())) {
-        goCubs -> pop();
-      } else {
-        break;
-      } 
-      if (goCubs -> empty()) {
-        curr = nextPoint;
-        break;
-      }
-      curr = goCubs -> peek();
-    }
-    
-   // return *this;
+	p.x = curr.x+1;
+	p.y = curr.y;
+	if (checkValid (sp ,p)){ IT -> add (p);}// cout << p.x << "  " << p.y << endl;}
+	
+	p.x = curr.x; 
+	p.y = curr.y + 1;
+	if (checkValid (sp ,p)){ IT -> add (p);}// cout << p.x << "  " << p.y << endl;}
+
+	p.x = curr.x-1;
+	p.y = curr.y;
+	if (checkValid (sp ,p)){ IT -> add (p); }//cout << p.x << "  " << p.y << endl;}
+
+	p.x = curr.x;
+	p.y = curr.y-1;
+	if (checkValid (sp ,p)){ IT -> add (p);}// cout << p.x << "  " << p.y << endl;}
+	
+	while (!IT -> empty()){
+		curr = IT -> peek();
+		if (visit.at(curr.x + curr.y * pngg.width())){
+			IT -> pop ();
+		}else{
+			break;
+		}
+		if (IT -> empty()){
+			curr = sp;
+			break;
+		}
+		curr = IT -> peek();
+	} 
+
   }
-
   return *this;
 }
 
+/**
+ * Iterator accessor opreator.
+ *
+ * Accesses the current Point in the ImageTraversal.
+ */
 Point ImageTraversal::Iterator::operator*() {
+  /** @todo [Part 1] */
   return curr;
 }
-bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other) {
-  bool thisEmpty, otherEmpty;
-  if(goCubs ==NULL) {
-    thisEmpty = true;
-  } else {
-    thisEmpty = goCubs -> empty();
-  } 
-  if (other.goCubs == NULL) {
-    otherEmpty = true;
-  } else {
-    otherEmpty = other.goCubs -> empty();
-  } 
-  return !(thisEmpty && otherEmpty);
+
+/**
+ * Iterator inequality operator.
+ *
+ * Determines if two iterators are not equal.
+ */
+bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
+  /** @todo [Part 1] */
+
+	  bool thisEmpty, otherEmpty;
+	  if (IT == NULL){
+			thisEmpty = true;
+	  }else{
+			thisEmpty = IT -> empty();
+	  }
+	  if (other.IT == NULL){
+			otherEmpty = true;
+	  }else{
+			otherEmpty = other.IT -> empty();
+	  }
+	  return !(thisEmpty && otherEmpty);
+
 }
 
-bool ImageTraversal::Iterator::checkValidity(Point nextPoint, Point points) {
-  if (points.x >= pngOne.width()) {
-    return false;
-  } 
-  if (points.y >= pngOne.height()) {
-    return false;
-  } 
-  if (toleranceOne <= calculateDelta(pngOne.getPixel(nextPoint.x, nextPoint.y), pngOne.getPixel(points.x, points.y))) {
-    return false;
-  } 
-  if (pass.at(points.x + points.y * pngOne.width()) == 1) {
-    return false;
-  }
-  return true;
+bool ImageTraversal::Iterator::checkValid (Point sp, Point p) {
+	if (p.x >= pngg.width()){
+		return false;
+	}
+	if (p.y >= pngg.height()){
+		return false;
+	}
+	if (toleranceg <= calculateDelta(pngg.getPixel(sp.x, sp.y) , pngg.getPixel(p.x, p.y)) ) {
+		return false;
+	}
+	if (visit.at(p.x + p.y * pngg.width()) == 1){
+		return false;
+	}
+	return true;
 }
+
+
+
