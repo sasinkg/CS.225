@@ -1,4 +1,4 @@
-#include <iterator>
+q#include <iterator>
 #include <cmath>
 
 #include <list>
@@ -14,35 +14,67 @@
 
 using namespace cs225;
 
-BFS::BFS(const PNG & png, const Point & start, double tolerance) { 
-   pngOne = png;
-   startPoint = start;
-   toleranceOne = tolerance;
-   queue.push(start);
+/**
+ * Initializes a breadth-first ImageTraversal on a given `png` image,
+ * starting at `start`, and with a given `tolerance`.
+ * @param png The image this BFS is going to traverse
+ * @param start The start point of this BFS
+ * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
+ * it will not be included in this BFS
+ */
+BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
+  /** @todo [Part 1] */
+  pngg = png;
+  startg = start;
+  toleranceg = tolerance;
+  daq.push(start);
 }
 
+/**
+ * Returns an iterator for the traversal starting at the first point.
+ */
 ImageTraversal::Iterator BFS::begin() {
-  return ImageTraversal::Iterator(this, startPoint, pngOne, toleranceOne);
+  /** @todo [Part 1] */
+  return ImageTraversal::Iterator(this, startg, pngg, toleranceg);
 }
 
+/**
+ * Returns an iterator for the traversal one past the end of the traversal.
+ */
 ImageTraversal::Iterator BFS::end() {
+  /** @todo [Part 1] */
   return ImageTraversal::Iterator();
 }
 
+/**
+ * Adds a Point for the traversal to visit at some point in the future.
+ */
 void BFS::add(const Point & point) {
-  queue.push(point);
+  /** @todo [Part 1] */
+  daq.push(point);
 }
 
+/**
+ * Removes and returns the current Point in the traversal.
+ */
 Point BFS::pop() {
-  Point temporary = queue.front();
-  queue.pop();
-  return temporary;
+  Point temp = daq.front();
+  daq.pop();
+  return temp;
 }
 
+/**
+ * Returns the current Point in the traversal.
+ */
 Point BFS::peek() const {
-  return queue.front();
-} 
+  /** @todo [Part 1] */
+  return daq.front();
+}
 
+/**
+ * Returns true if the traversal is empty.
+ */
 bool BFS::empty() const {
-  return queue.empty();
+  /** @todo [Part 1] */
+  return daq.empty();
 }
