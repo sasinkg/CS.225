@@ -12,6 +12,7 @@
 #include <vector>
 
 using namespace cs225;
+using namespace std;
 
 /**
  * A base class for traversal algorithms on images.
@@ -26,45 +27,24 @@ using namespace cs225;
  */
 class ImageTraversal {
 public:
-  /**
-   * A forward iterator through an ImageTraversal.
-   */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
-    Iterator(ImageTraversal * newTrav, Point p, PNG newPNG, double tol);
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-    bool checkParameter(Point boys);
-    void testValid(Point newStart, Point origin);
-    bool checkValidity(Point newStart, Point origin);
-    //bool boundaries(Point curr);
-    ImageTraversal * trav;
-    bool checkTolerance(Point next);
-    Point sp;
-    Point temp;
-    PNG newPNG;
-    double newTolerance;
-    //unsigned int w;
-    //unsigned int h;
+    Iterator(ImageTraversal * goBears, Point pointTwo, PNG pngg, double tol);
 
-    /** @todo [Part 1] */
-    /** add member functions if neccesary*/
+    bool checkValidity(Point nextPoint, Point p);
 
   private:
-    /** @todo [Part 1] */
-    /** add private members here if neccesary*/
+    ImageTraversal * goCubs;
+    Point nextPoint;
     Point curr;
-    std::vector <int> queue;
-
-  };
-  //public:
-    
-  /**
-   * The begining of an iterator
-   * Virtual function. Derived class need to implement this
-   */
+    PNG pngOne;
+    double toleranceOne;
+    std::vector<int> pass;
+  }; 
   virtual Iterator begin() = 0;
 
   /**

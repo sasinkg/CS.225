@@ -30,17 +30,13 @@ public:
   void add(const Point & point);
   Point pop();
   Point peek() const;
-  bool empty() const;
- // bool boundaries(const Point & point);
+  bool empty() const;  
 
-   
 
 private:
-	/** @todo [Part 1] */
-	/** add private members here*/ 
+  double toleranceOne;
+  PNG pngOne;
+  Point startPoint;
   std::stack<Point> stack;
-  PNG newPNG;
-   Point newStart;
-   double newTolerance;
   
 };

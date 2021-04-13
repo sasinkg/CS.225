@@ -7,14 +7,7 @@
 #include "ImageTraversal.h"
 
 using namespace std;
-/**
- * Calculates a metric for the difference between two pixels, used to
- * calculate if a pixel is within a tolerance.
- *
- * @param p1 First pixel
- * @param p2 Second pixel
- * @return the difference between two HSLAPixels
- */
+
 double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2) {
   double h = fabs(p1.h - p2.h);
   double s = p1.s - p2.s;
@@ -27,134 +20,98 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
   return sqrt( (h*h) + (s*s) + (l*l) );
 }
 
-/**
- * Default iterator constructor.
- */
-ImageTraversal::Iterator::Iterator() : trav(NULL) {
-  /** @todo [Part 1] */
-  //trav = NULL;
-  /* unsigned int w = 0;
-  unsigned int h = 0;
-  unsigned int  */
-}
 
-/**
- * Iterator increment opreator.
- *
- * Advances the traversal of the image.
- */
-ImageTraversal::Iterator::Iterator(ImageTraversal * newTrav, Point p, PNG pngOne, double tol){
-  /** @todo [Part 1] */
-  //return *this;
-  trav = newTrav;
-  sp = p;
-  newPNG = pngOne;
-  newTolerance = tol;
+ImageTraversal::Iterator::Iterator() : goCubs(NULL) {}
 
-  //queue.resize(newTrav -> newPNG.width());
+ImageTraversal::Iterator::Iterator(ImageTraversal * goBears, Point pointTwo, PNG pngg, double tol){
+  goCubs = goBears;
+  nextPoint = pointTwo;
+  pngOne = pngg;
+  toleranceOne = tol;
+  curr = goCubs -> peek();
 
-  // for(unsigned i = 0; i < newTrav -> newPNG.width(); i++) {
-  //   queue[i] = vector<bool> (trav -> newPNG.height());   
-  // }
-  temp = trav -> peek();
-  double area = newPNG.height() * newPNG.width();
-  for (unsigned i = 0;  i < area; i++) {
-    queue.push_back(false);
+  for (unsigned i = 0; i < pngOne.height() * pngOne.width(); i++) {
+    pass.push_back(false);
   }
 }
-
-/**
- * Iterator accessor opreator.
- *
- * Accesses the current Point in the ImageTraversal.
- */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  Point origin (0,0);
-  if(!trav -> empty()) {
-    temp = trav -> pop();
-    origin.x = temp.x;
-    origin.y = temp.y;
-    int newWidth = origin.y * newPNG.width();
-    queue.at(origin.x + newWidth) = 1;
+  Point points (0,0);
+  if (!goCubs -> empty()) {
+    curr = goCubs -> pop();
+    points.x = curr.x;
+    points.y = curr.y;
+    pass.at(points.x + points.y * pngOne.width()) = 1;
 
-    //Point originOne (0,0);
-
-    origin.x = temp.x + 1;
-    origin.y = temp.y;
-    //testValid(sp, origin);
-    if(checkValidity(sp, origin)) { trav -> add(origin);}
-
-    origin.x = temp.x;
-    origin.y = temp.y + 1;
-//    testValid(sp, origin);
-    if(checkValidity(sp, origin)) { trav -> add(origin);}
-
-
-    origin.x = temp.x - 1;
-    origin.y = temp.y;
-  //  testValid(sp, origin);
-      if(checkValidity(sp, origin)) { trav -> add(origin);}
-
-
-    origin.x = temp.x;
-    origin.y = temp.y - 1;
-   // testValid(sp, origin);
-       if(checkValidity(sp, origin)) { trav -> add(origin);}
-
-
-    while(!trav -> empty()) {
-      temp = trav -> peek();
-      int total = temp.x + temp.y * newPNG.width();
-      if (queue.at(total)) {
-        trav -> pop();
-      } else {
-        break;
-      }
-      if (trav -> empty()) {
-        temp = sp;
-        break;
-      }
-      temp = trav -> peek();
+    points.x = curr.x + 1;
+    points.y = curr.y;
+    if (checkValidity(nextPoint,p)) {
+      goCubs -> add(p);
     }
+     points.x = curr.x;
+    points.y = curr.y + 1;
+    if (checkValidity(nextPoint,p)) {
+      goCubs -> add(p);
+    }
+     points.x = curr.x - 1;
+    points.y = curr.y;
+    if (checkValidity(nextPoint,p)) {
+      goCubs -> add(p);
+    }
+    points.x = curr.x;
+    points.y = curr.y - 1;
+    if (checkValidity(nextPoint,p)) {
+      goCubs -> add(p);
+
+      while(!goCubs -> empty()) {
+        curr = goCubs -> peek();
+        if(pass.at(curr.x + curr.y * pngOne.width())) {
+          goCubs -> pop();
+        } else {
+          break;
+        } 
+        if (goCubs -> empty()) {
+          curr = nextPoint;
+          break;
+        }
+        curr = goCubs -> peek();
+      }
+    }
+    return *this;
   }
-  return *this;
+
+return *this;
 }
+
 Point ImageTraversal::Iterator::operator*() {
   return curr;
 }
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other) {
-  bool thisEmpty = false;
-  bool otherEmpty = false;
-
-  if (trav == NULL) {
+  bool thisEmpty, otherEmpty;
+  if(goCubs ==NULL) {
     thisEmpty = true;
   } else {
-    thisEmpty = trav -> empty();
-  }
-
-  if(other.trav == NULL) {
+    thisEmpty = goCubs -> empty();
+  } 
+  if (other.goCubs == NULL) {
     otherEmpty = true;
   } else {
-    otherEmpty = other.trav -> empty();
-  }
+    otherEmpty = other.goCubs -> empty();
+  } 
   return !(thisEmpty && otherEmpty);
 }
-void ImageTraversal::Iterator::testValid(Point sp, Point origin) {
-    if (checkValidity(sp, origin)) {
-      trav -> add(origin);
-    }
-}
 
-bool ImageTraversal::Iterator::checkValidity(Point sp, Point origin) {
-  if (origin.x >= newPNG.width() && origin.y >= newPNG.height()) {
-    return false;
-  }
-  if (newTolerance <= calculateDelta(newPNG.getPixel(sp.x, sp.y), newPNG.getPixel(origin.x, origin.y))) {
+bool ImageTraversal::Iterator::checkValidity(Point nextPoint, Point p) {
+  if (p.x >= pngOne.width()) {
     return false;
   } 
-  if (queue.at(origin.x + origin.y * newPNG.width()) == 1) {
+  if (p.y >= pngOne.height()) {
+    return false;
+  } 
+  if (toleranceOne <= calculateDelta(pngOne.getPixel(nextPoint.x, nextPoint.y), pngOne.getPixel(p.x, p.y))) {
+    return false;
+  } 
+  if (pass.at(p.x + p.y * pngOne.width()) == 1) {
     return false;
   }
   return true;
 }
-
