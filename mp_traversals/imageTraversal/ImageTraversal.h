@@ -35,7 +35,7 @@ public:
     bool operator!=(const Iterator &other);
     Iterator(ImageTraversal * goBears, Point pointTwo, PNG pngg, double tol);
 
-    bool checkValidity(Point nextPoint, Point p);
+    bool checkValidity(Point nextPoint, Point points);
 
   private:
     ImageTraversal * goCubs;

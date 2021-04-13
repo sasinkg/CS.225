@@ -21,7 +21,7 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 }
 
 
-ImageTraversal::Iterator::Iterator() : goCubs(NULL) {}
+ImageTraversal::Iterator::Iterator() { goCubs = NULL;}
 
 ImageTraversal::Iterator::Iterator(ImageTraversal * goBears, Point pointTwo, PNG pngg, double tol){
   goCubs = goBears;
@@ -44,42 +44,42 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
 
     points.x = curr.x + 1;
     points.y = curr.y;
-    if (checkValidity(nextPoint,p)) {
-      goCubs -> add(p);
+    if (checkValidity(nextPoint, points)) {
+      goCubs -> add(points);
     }
      points.x = curr.x;
     points.y = curr.y + 1;
-    if (checkValidity(nextPoint,p)) {
-      goCubs -> add(p);
+    if (checkValidity(nextPoint,points)) {
+      goCubs -> add(points);
     }
      points.x = curr.x - 1;
     points.y = curr.y;
-    if (checkValidity(nextPoint,p)) {
-      goCubs -> add(p);
+    if (checkValidity(nextPoint,points)) {
+      goCubs -> add(points);
     }
     points.x = curr.x;
     points.y = curr.y - 1;
-    if (checkValidity(nextPoint,p)) {
-      goCubs -> add(p);
-
-      while(!goCubs -> empty()) {
-        curr = goCubs -> peek();
-        if(pass.at(curr.x + curr.y * pngOne.width())) {
-          goCubs -> pop();
-        } else {
-          break;
-        } 
-        if (goCubs -> empty()) {
-          curr = nextPoint;
-          break;
-        }
-        curr = goCubs -> peek();
-      }
+    if (checkValidity(nextPoint,points)) {
+      goCubs -> add(points);
     }
-    return *this;
+    while(!goCubs -> empty()) {
+      curr = goCubs -> peek();
+      if(pass.at(curr.x + curr.y * pngOne.width())) {
+        goCubs -> pop();
+      } else {
+        break;
+      } 
+      if (goCubs -> empty()) {
+        curr = nextPoint;
+        break;
+      }
+      curr = goCubs -> peek();
+    }
+    
+   // return *this;
   }
 
-return *this;
+  return *this;
 }
 
 Point ImageTraversal::Iterator::operator*() {
@@ -100,17 +100,17 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator & other
   return !(thisEmpty && otherEmpty);
 }
 
-bool ImageTraversal::Iterator::checkValidity(Point nextPoint, Point p) {
-  if (p.x >= pngOne.width()) {
+bool ImageTraversal::Iterator::checkValidity(Point nextPoint, Point points) {
+  if (points.x >= pngOne.width()) {
     return false;
   } 
-  if (p.y >= pngOne.height()) {
+  if (points.y >= pngOne.height()) {
     return false;
   } 
-  if (toleranceOne <= calculateDelta(pngOne.getPixel(nextPoint.x, nextPoint.y), pngOne.getPixel(p.x, p.y))) {
+  if (toleranceOne <= calculateDelta(pngOne.getPixel(nextPoint.x, nextPoint.y), pngOne.getPixel(points.x, points.y))) {
     return false;
   } 
-  if (pass.at(p.x + p.y * pngOne.width()) == 1) {
+  if (pass.at(points.x + points.y * pngOne.width()) == 1) {
     return false;
   }
   return true;
