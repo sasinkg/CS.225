@@ -18,7 +18,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
    pngOne = png;
    startPoint = start;
    toleranceOne = tolerance;
-   daqueue.push(start);
+   queue.push(start);
 }
 
 ImageTraversal::Iterator BFS::begin() {
@@ -30,19 +30,19 @@ ImageTraversal::Iterator BFS::end() {
 }
 
 void BFS::add(const Point & point) {
-  daqueue.push(point);
+  queue.push(point);
 }
 
 Point BFS::pop() {
-  Point temporary = daqueue.front();
-  daqueue.pop();
+  Point temporary = queue.front();
+  queue.pop();
   return temporary;
 }
 
 Point BFS::peek() const {
-  return daqueue.front();
+  return queue.front();
 } 
 
 bool BFS::empty() const {
-  return daqueue.empty();
+  return queue.empty();
 }
