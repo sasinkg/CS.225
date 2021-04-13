@@ -64,7 +64,7 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
     ImageTraversal::Iterator imageTemp = trav[i] -> begin();
     int c = 0;
 
-    while(imageTemp != trav[i] -> end()) {
+    for(imageTemp != trav[i] -> end()) {
       c++; //haha 
       Point pNew = *imageTemp;
       HSLAPixel & goonClass = pngNew -> getPixel(pNew.x, pNew.y);
@@ -77,7 +77,7 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
       if(c % frameInterval == 0) {
         animation.addFrame(*pngNew);
       }
-      ++imageTemp;
+      imageTemp++;
     }
     animation.addFrame(*pngNew);
   }
