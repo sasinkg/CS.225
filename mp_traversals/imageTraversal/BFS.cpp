@@ -1,4 +1,4 @@
-q#include <iterator>
+#include <iterator>
 #include <cmath>
 
 #include <list>
@@ -24,10 +24,10 @@ using namespace cs225;
  */
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
-  pngg = png;
-  startg = start;
-  toleranceg = tolerance;
-  daq.push(start);
+  image_ = png;
+  tolerance_ = tolerance;
+  startpoint_ = start;
+  queue.push(start);
 }
 
 /**
@@ -35,7 +35,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator(this, startg, pngg, toleranceg);
+  return ImageTraversal::Iterator(startpoint_, tolerance_, image_, this);
 }
 
 /**
@@ -51,15 +51,15 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
-  daq.push(point);
+  queue.push(point);
 }
 
 /**
  * Removes and returns the current Point in the traversal.
  */
 Point BFS::pop() {
-  Point temp = daq.front();
-  daq.pop();
+  point temp = queue.front();
+  queue.pop();
   return temp;
 }
 
@@ -68,7 +68,7 @@ Point BFS::pop() {
  */
 Point BFS::peek() const {
   /** @todo [Part 1] */
-  return daq.front();
+  return queue.front();
 }
 
 /**
@@ -76,5 +76,5 @@ Point BFS::peek() const {
  */
 bool BFS::empty() const {
   /** @todo [Part 1] */
-  return daq.empty();
+  return queue.empty();
 }

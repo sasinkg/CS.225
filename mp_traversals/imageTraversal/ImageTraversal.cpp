@@ -8,142 +8,80 @@
 
 #include "ImageTraversal.h" 
 using namespace std;
-/**
- * Calculates a metric for the difference between two pixels, used to
- * calculate if a pixel is within a tolerance.
- *
- * @param p1 First pixel
- * @param p2 Second pixel
- * @return the difference between two HSLAPixels
- */
+
 double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2) {
   double h = fabs(p1.h - p2.h);
   double s = p1.s - p2.s;
   double l = p1.l - p2.l;
 
-  // Handle the case where we found the bigger angle between two hues:
-  if (h > 180) { h = 360 - h; }
+  if (h>180) { h = 360 - h};
   h /= 360;
 
-  return sqrt( (h*h) + (s*s) + (l*l) );
+  return sqrt( (h*h) + (s*s) + (l*l));
 }
-
-/**
- * Default iterator constructor.
- */
 ImageTraversal::Iterator::Iterator() {
-  /** @todo [Part 1] */
-  IT = NULL;
+  trav = NULL;
+  tolerance_ = 0;
+  startpoint_ = Point(0,0);
+  currentpoint_ = startpoint_;
 }
+ImageTraversal::Iterator::Iterator(startpoint2, tolerance2, image2, ImageTraversal * trav2) {
+  trav = trav2;
+  startpoint_ = startpoint2;
+  image_ = image2;
+  tolerance_ = tolerance2;
 
-ImageTraversal::Iterator::Iterator(ImageTraversal * itrav, Point spo, PNG png1, double tol) {
-  /** @todo [Part 1] */
-  IT = itrav;
-  sp = spo;
-  pngg = png1;
-  toleranceg = tol;
-  curr = IT->peek();
-  for (unsigned i = 0; i < pngg.height() * pngg.width(); i++){
-		visit.push_back(false);
+  curr = trav -> peek();
+
+  for (unsigned i = 0; i < image_.height() * image2.width(); i++) {
+    pass.push_back(false);
   }
 }
-
-/**
- * Iterator increment opreator.
- *
- * Advances the traversal of the image.
- */
+ // return ImageTraversal::Iterator();
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  /** @todo [Part 1] */
-  Point p (0, 0);
-  if (!IT -> empty()){
-	curr = IT -> pop();
-	p.x = curr.x;
-	p.y = curr.y;
-	visit.at(p.x + p.y*pngg.width()) = 1;
-
-	p.x = curr.x+1;
-	p.y = curr.y;
-	if (checkValid (sp ,p)){ IT -> add (p);}// cout << p.x << "  " << p.y << endl;}
-	
-	p.x = curr.x; 
-	p.y = curr.y + 1;
-	if (checkValid (sp ,p)){ IT -> add (p);}// cout << p.x << "  " << p.y << endl;}
-
-	p.x = curr.x-1;
-	p.y = curr.y;
-	if (checkValid (sp ,p)){ IT -> add (p); }//cout << p.x << "  " << p.y << endl;}
-
-	p.x = curr.x;
-	p.y = curr.y-1;
-	if (checkValid (sp ,p)){ IT -> add (p);}// cout << p.x << "  " << p.y << endl;}
-	
-	while (!IT -> empty()){
-		curr = IT -> peek();
-		if (visit.at(curr.x + curr.y * pngg.width())){
-			IT -> pop ();
-		}else{
-			break;
-		}
-		if (IT -> empty()){
-			curr = sp;
-			break;
-		}
-		curr = IT -> peek();
-	} 
-
+  Point right = Point(currentpoint_.x + 1, currentpoint_.y);
+  if(Visit(right) == true) {
+    trav -> add(right);
   }
-  return *this;
-}
+  Point left = Point(currentpoint_.x - 1, currentpoint_.y);
+  if(Visit(left) == true) {
+    trav -> add(left);
+  }
+  Point up = Point(currentpoint_.x, currentpoint_.y - 1);
+  if(Visit(up) == true) {
+    trav -> add(up);
+  }
+  Point down = Point(currentpoint_.x, currentpoint_.y + 1);
+  if(Visit(down) == true) {
+    trav -> add(down);
+  }
 
-/**
- * Iterator accessor opreator.
- *
- * Accesses the current Point in the ImageTraversal.
- */
+  pass[currentpoint_.x][currentpoint_.y] = true;
+  see = trav -> peek();
+
+  while(!trav-> empty()) {
+    if(Visit(see) == false) {
+      trav -> pop();
+      if(trav ->empty()) {
+        return *this;
+      }
+    } else {
+      break;
+    }
+    see = trav-> peek;
+    return *this;
+  }
+}
 Point ImageTraversal::Iterator::operator*() {
-  /** @todo [Part 1] */
-  return curr;
+  return;
 }
-
-/**
- * Iterator inequality operator.
- *
- * Determines if two iterators are not equal.
- */
-bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
-  /** @todo [Part 1] */
-
-	  bool thisEmpty, otherEmpty;
-	  if (IT == NULL){
-			thisEmpty = true;
-	  }else{
-			thisEmpty = IT -> empty();
-	  }
-	  if (other.IT == NULL){
-			otherEmpty = true;
-	  }else{
-			otherEmpty = other.IT -> empty();
-	  }
-	  return !(thisEmpty && otherEmpty);
-
+ bool ImageTraversal::Iterator::Visit(Point sp) {
+  if(sp.x < image_.width()) {
+    if (sp.y < image.height()) {
+      if (calculateDelta(image_.getPixel(startpoint_.x, startpoint_.y), image_.getPixel(sp.x, sp.y)) < tolerance_ && pass[sp.x][sp.y] == false) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
-
-bool ImageTraversal::Iterator::checkValid (Point sp, Point p) {
-	if (p.x >= pngg.width()){
-		return false;
-	}
-	if (p.y >= pngg.height()){
-		return false;
-	}
-	if (toleranceg <= calculateDelta(pngg.getPixel(sp.x, sp.y) , pngg.getPixel(p.x, p.y)) ) {
-		return false;
-	}
-	if (visit.at(p.x + p.y * pngg.width()) == 1){
-		return false;
-	}
-	return true;
-}
-
-
-

@@ -28,15 +28,15 @@ public:
   ImageTraversal::Iterator end();
 
   void add(const Point & point);
-  Point pop();
   Point peek() const;
   bool empty() const;
+  Point pop();
 
 private:
+	std::stack <Point> stack; 
 	/** @todo [Part 1] */
 	/** add private members here*/
-	PNG pngg;
-	Point startg;
-	double toleranceg;
-	std::stack <Point> dastack; 
+	PNG image_;
+	Point startpoint_;
+	double tolerance_;
 };

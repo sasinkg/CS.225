@@ -24,10 +24,10 @@
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
-  pngg = png;
-  startg = start;
-  toleranceg = tolerance;
-  dastack.push(start);
+  image_ = png;
+  tolerance_ = tolerance;
+  startpoint_ = start;
+  queue.push(start);
 }
 
 /**
@@ -35,7 +35,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator(this, startg, pngg, toleranceg);
+  return ImageTraversal::Iterator(startpoint_, tolerance_, image_, this);
 }
 
 /**
@@ -51,7 +51,7 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
   /** @todo [Part 1] */
-  dastack.push(point);
+  stack.push(point);
 }
 
 /**
@@ -59,8 +59,8 @@ void DFS::add(const Point & point) {
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  Point temp = dastack.top();
-  dastack.pop();
+  Point temp = stack.top();
+  stack.pop();
   return temp;
 }
 
@@ -69,14 +69,13 @@ Point DFS::pop() {
  */
 Point DFS::peek() const {
   /** @todo [Part 1] */
-  
-  return dastack.top();
+  return stack.top();
+ 
 }
 
 /**
  * Returns true if the traversal is empty.
  */
 bool DFS::empty() const {
-  /** @todo [Part 1] */
-  return dastack.empty();
+ return stack.empty()''
 }
