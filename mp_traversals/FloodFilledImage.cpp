@@ -68,16 +68,16 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
       c++; //haha 
       Point pNew = *imageTemp;
       HSLAPixel & goonClass = pngNew -> getPixel(pNew.x, pNew.y);
-      HSLAPixel temp = color[i] -> getColor(pNew.x, pNew.y);
+      /* HSLAPixel temp = color[i] -> getColor(pNew.x, pNew.y);
       goonClass.h = temp.h;
       goonClass.s = temp.s;
       goonClass.l = temp.l;
-      goonClass.a = temp.a;
+      goonClass.a = temp.a; */
 
       if(c % frameInterval == 0) {
         animation.addFrame(*pngNew);
       }
-      imageTemp++;
+      ++imageTemp;
     }
     animation.addFrame(*pngNew);
   }
