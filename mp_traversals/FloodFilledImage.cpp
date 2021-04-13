@@ -64,15 +64,15 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
     ImageTraversal::Iterator imageTemp = trav[i] -> begin();
     int c = 0;
 
-    for(imageTemp != trav[i] -> end()) {
+    if(imageTemp != trav[i] -> end()) {
       c++; //haha 
       Point pNew = *imageTemp;
       HSLAPixel & goonClass = pngNew -> getPixel(pNew.x, pNew.y);
-      /* HSLAPixel temp = color[i] -> getColor(pNew.x, pNew.y);
+      HSLAPixel temp = color[i] -> getColor(pNew.x, pNew.y);
       goonClass.h = temp.h;
       goonClass.s = temp.s;
       goonClass.l = temp.l;
-      goonClass.a = temp.a; */
+      goonClass.a = temp.a; 
 
       if(c % frameInterval == 0) {
         animation.addFrame(*pngNew);
