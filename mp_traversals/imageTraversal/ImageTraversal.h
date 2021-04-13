@@ -35,8 +35,8 @@ public:
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
-
-    bool Validity(Point sp, Point p);
+    void PreValidity(Point p, Point s);
+    bool Validity(Point p, Point s);
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/

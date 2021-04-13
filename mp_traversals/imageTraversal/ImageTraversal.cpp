@@ -55,6 +55,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal * trav2, PNG png2, Point start
     png1 = png2;
     tolerance1 = tolerance2;
     double area = png1.width() * png1.height();
+    curr = trav -> peek();
     for (unsigned i = 0; i < area; i++) {
         //pass[png1.width()][png1.height()] = (false);
         pass.push_back(false);
@@ -78,27 +79,30 @@ if(trav -> empty() == false) {
     
     s.x = curr.x + 1;
     s.y = curr.y;
-    if (Validity(p, s)) {
-        trav -> add(s);
-    } 
-    if (Validity(p,s)) {
-        trav -> add(s);
-    }
-    if (Validity(p,s)) {
-        trav -> add(s);
-    }
-    if (Validity(p,s)) {
-        trav -> add(s);
-    }
+    PreValidity(p,s);
+    
+    s.x = curr.x;
+    s.y = curr.y + 1;
+    PreValidity(p,s);
+
+    s.x = curr.x - 1;
+    s.y = curr.y;
+    PreValidity(p,s);
+
+    s.x = curr.x;
+    s.y = curr.y - 1;
+    PreValidity(p,s);
+    
 }
   while (trav -> empty() == false) {
       curr = trav -> peek();
-      if (pass.at(curr.x + curr.y * png1.width())) {
+      int dab = curr.x + curr.y * png1.width();
+      if (pass.at(dab)) {
           trav -> pop();
       } else {
           break;
       } 
-      if (trav -> empty()) {
+      if (trav -> empty() == true) {
           curr = p;
           break;
       }
@@ -106,16 +110,22 @@ if(trav -> empty() == false) {
   }
   return *this;
 }
+void ImageTraversal::Iterator::PreValidity(Point p, Point s) {
+  if (Validity(p, s)) {
+        trav -> add(s);
+    } 
+}
 bool ImageTraversal::Iterator::Validity(Point p, Point s) {
     if(s.x >= png1.width() || s.y >= png1.height()) {
+        return false;
+    }
+    if (pass.at(s.x + s.y * png1.width()) == 1) {
         return false;
     }
     if (tolerance1 <= calculateDelta(png1.getPixel(p.x, p.y), png1.getPixel(s.x,s.y))) {
         return false;
     } 
-    if (pass.at(s.x + s.y * png1.width()) == 1) {
-        return false;
-    }
+    return true;
 }
 
 /**
