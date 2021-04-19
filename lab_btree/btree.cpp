@@ -28,6 +28,12 @@ V BTree<K, V>::find(const BTreeNode* subroot, const K& key) const
     /* TODO Finish this function */
 
     size_t first_larger_idx = insertion_idx(subroot->elements, key);
+    if (!subroot -> elements.empty() && subroot -> elements.size() > first_larger_idx && subroot -> elements[first_larger_idx].key == key) {
+        return subroot -> elements[first_larger_idx].value;
+    } else if (subroot -> is_leaf) {
+        return V();
+    }
+    return find(subroot -> children[first_larger_idx], key);
 
     /* If first_larger_idx is a valid index and the key there is the key we
      * are looking for, we are done. */
@@ -141,6 +147,12 @@ void BTree<K, V>::split_child(BTreeNode* parent, size_t child_idx)
 
 
     /* TODO Your code goes here! */
+    parent -> elements.insert(elem_itr, child -> elements[mid_elem_idx]);
+    parent -> children.insert(child_itr, new_right);
+    new_right -> elements.assign(mid_elem_itr + 1, child -> elements.end());
+    new_right -> children.assign(mid_child_itr, child -> children.end());
+    new_left -> elements.assign(child -> elements.begin(), mid_elem_itr);
+    new_left -> children.assign(child -> children.begin(), mid_child_itr);
 }
 
 /**
@@ -165,4 +177,14 @@ void BTree<K, V>::insert(BTreeNode* subroot, const DataPair& pair)
     size_t first_larger_idx = insertion_idx(subroot->elements, pair);
 
     /* TODO Your code goes here! */
+     if (!subroot -> elements.empty() && subroot -> elements.size() > first_larger_idx && subroot -> elements[first_larger_idx].key == pair.key) {
+        return;
+    } else if (subroot -> is_leaf) {
+        subroot -> elements.insert(subroot -> elements.begin() + first_larger_idx, pair);
+    } else {
+        insert(subroot -> children[first_larger_idx], pair);
+        if (subroot -> children[first_larger_idx] -> elements.size() >= order) {
+            split_child(subroot, first_larger_idx);
+        }
+    }
 }
