@@ -91,6 +91,16 @@ void DHHashTable<K, V>::remove(K const& key)
     /**
      * @todo Implement this function
      */
+    for (size_t i = 0; i < size; i++) {
+        if (table[i] != NULL) {
+            if (table[i] -> first == key) {
+                delete table[i];
+                table[i] = nullptr;
+                should_probe[i] = false;
+                elems--;
+            }
+        }
+    }
 }
 
 template <class K, class V>
@@ -99,6 +109,14 @@ int DHHashTable<K, V>::findIndex(const K& key) const
     /**
      * @todo Implement this function
      */
+    for (size_t i = 0; i< size; i++) {
+        if (table[i] != NULL) {
+            if (table[i] -> first == key) {
+                return i;
+            }
+        }
+    }
+
     return -1;
 }
 

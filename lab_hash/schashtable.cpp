@@ -54,6 +54,14 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
      * @todo Implement this function.
      *
      */
+    size_t index = hashes::hash(key,size);
+    std::pair<K,V> p(key, value);
+    table[index].push_front(p);
+    elems++; 
+    double newElems = elems/size;
+    if (newElems >= 0.7) {
+        resizeTable();
+    } 
 }
 
 template <class K, class V>
@@ -67,6 +75,14 @@ void SCHashTable<K, V>::remove(K const& key)
      * erase() function on std::list!
      */
     (void) key; // prevent warnings... When you implement this function, remove this line.
+    size_t index = hashes::hash(key,size);
+    for(it = table[index].begin(); it != table[index].end(); it++) {
+        if (it -> first == key) {
+            table -> erase(it);
+            elems--;
+            break;
+        }
+    }
 }
 
 template <class K, class V>
@@ -76,7 +92,13 @@ V SCHashTable<K, V>::find(K const& key) const
     /**
      * @todo: Implement this function.
      */
-
+    typename::std::list<std::pair<K,V>>::iterator it;
+    size_t index = hashes::hash(key, size);
+    for (it = table[index].begin(); it != table[index].end(); it++) {
+        if (it -> first == key) {
+            return it -> second;
+        }
+    }
     return V();
 }
 

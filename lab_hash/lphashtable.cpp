@@ -79,9 +79,25 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * **Do this check *after* increasing elems (but before inserting)!!**
      * Also, don't forget to mark the cell for probing with should_probe!
      */
+    elems++; 
+    double newElems = elems/size;
+    if (newElems >= 0.7) {
+        resizeTable();
+    } 
+    std::pair<K,V>*p = new std::pair<K,V> (key, value);
+    size_t index = hashes::hash(key,size);
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    while(true) {
+        if (should_probe[index]) {
+            index = (index+1)%size;
+        } else {
+            table[index] = p;
+            should_probe[index] = true;
+            break;
+        }
+    }
+    //(void) key;   // prevent warnings... When you implement this function, remove this line.
+    //(void) value; // prevent warnings... When you implement this function, remove this line.
 }
 
 template <class K, class V>
@@ -90,6 +106,16 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+     for (size_t i = 0; i < size; i++) {
+        if (table[i] != NULL) {
+            if (table[i] -> first == key) {
+                delete table[i];
+                table[i] = nullptr;
+                should_probe[i] = false;
+                elems--;
+            }
+        }
+    }
 }
 
 template <class K, class V>
@@ -101,7 +127,13 @@ int LPHashTable<K, V>::findIndex(const K& key) const
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    for (size_t i = 0; i< size; i++) {
+            if (table[i] != NULL) {
+                if (table[i] -> first == key) {
+                    return i;
+                }
+            }
+        }
     return -1;
 }
 
