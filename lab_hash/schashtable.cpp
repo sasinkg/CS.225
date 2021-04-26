@@ -54,9 +54,9 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
      * @todo Implement this function.
      *
      */
-    size_t index = hashes::hash(key,size);
+    size_t idx = hashes::hash(key,size);
     std::pair<K,V> p(key, value);
-    table[index].push_front(p);
+    table[idx].push_front(p);
     elems++; 
     double newElems = elems/size;
     if (newElems >= 0.7) {
@@ -74,9 +74,9 @@ void SCHashTable<K, V>::remove(K const& key)
      * Please read the note in the lab spec about list iterators and the
      * erase() function on std::list!
      */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
-    size_t index = hashes::hash(key,size);
-    for(it = table[index].begin(); it != table[index].end(); it++) {
+   // (void) key; // prevent warnings... When you implement this function, remove this line.
+    size_t idx = hashes::hash(key,size);
+    for(it = table[idx].begin(); it != table[idx].end(); it++) {
         if (it -> first == key) {
             table -> erase(it);
             elems--;
@@ -93,8 +93,8 @@ V SCHashTable<K, V>::find(K const& key) const
      * @todo: Implement this function.
      */
     typename::std::list<std::pair<K,V>>::iterator it;
-    size_t index = hashes::hash(key, size);
-    for (it = table[index].begin(); it != table[index].end(); it++) {
+    size_t idx = hashes::hash(key, size);
+    for (it = table[idx].begin(); it != table[idx].end(); it++) {
         if (it -> first == key) {
             return it -> second;
         }
@@ -156,4 +156,17 @@ void SCHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+
+    size_t newSize = findPrime(size * 2);
+    std::list<std::pair<K,V>>* table2 = new std::list<std::pair<K,V>>[newSize];
+    for(size_t i = 0; i < size; i++) {
+        for (it = table[i].begin(); it != table[i].end(); it++) {
+            size_t idx = hashes::hash(it -> first, newSize);
+            std::pair<K,V> p(it -> first, it -> second);
+            table2[idx].push_front(p);
+        }
+    }
+    delete []table;
+    table = table2;
+    size = newSize;
 }
