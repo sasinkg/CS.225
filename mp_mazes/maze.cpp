@@ -147,3 +147,6 @@ PNG * SquareMaze::drawMaze() const {
   PNG *res = new PNG(widthNew, heightNew);
   return res;
 }
+PNG * SquareMaze::drawMazeWithSolution () {
+    return NULL;
+}
